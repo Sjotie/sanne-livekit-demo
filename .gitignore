@@ -1,0 +1,38 @@
+# Secrets & credentials
+.env
+.env.*
+!.env.example
+!.env.template
+*.local.*
+.claude/settings.local.json
+credentials.json
+service-account*.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+
+# Auth tokens & sessions
+.auth/
+.tokens/
+*.token
+*_token.json
+
+# Local meeting identity data
+identity/
+life/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# JavaScript
+node_modules/
+*.tsbuildinfo
+
+# OS/editor noise
+.DS_Store
+.idea/
+.vscode/

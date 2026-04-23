@@ -1,0 +1,16 @@
+{
+  "name": "sanne-livekit-web",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun server.mjs",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@livekit/protocol": "^1.41.0",
+    "livekit-server-sdk": "^2.15.1"
+  },
+  "devDependencies": {
+    "bun-types": "^1.2.0"
+  }
+}
