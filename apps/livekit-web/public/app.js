@@ -23,7 +23,12 @@ async function toggleConnection() {
     return;
   }
 
-  const roomName = roomNameEl.value.trim() || "sanne-demo";
+  const requestedRoomName = roomNameEl.value.trim();
+  const roomName =
+    !requestedRoomName || requestedRoomName.startsWith("sanne-demo-")
+      ? `sanne-demo-${Date.now()}`
+      : requestedRoomName;
+  roomNameEl.value = roomName;
   setStatus("Token ophalen");
   const tokenResponse = await fetch("/token", {
     method: "POST",
