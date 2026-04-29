@@ -1,6 +1,6 @@
 """Duo-agent voor Sanne's binnenloop-fase.
 
-Twee 'agents' (Optimist + Scepticus) joinen dezelfde LiveKit-room als twee
+Twee 'agents' (Optimist + Criticus) joinen dezelfde LiveKit-room als twee
 aparte participants en voeren een continue dialoog over thema's uit
 'This is not AI'. De clou:
 
@@ -23,7 +23,7 @@ Vereiste env vars (zie .env.local):
     MISTRAL_API_KEY
     GOOGLE_API_KEY  (voor Gemini LLM)
     DUO_VOICE_OPTIMIST  (Mistral voice ID)
-    DUO_VOICE_SCEPTICUS (Mistral voice ID)
+    DUO_VOICE_CRITICUS (Mistral voice ID)
     DUO_ROOM_NAME       (default: 'binnenloop')
 """
 
@@ -60,7 +60,7 @@ GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 ROOM_NAME = os.environ.get("DUO_ROOM_NAME", "binnenloop")
 
 VOICE_OPTIMIST = os.environ.get("DUO_VOICE_OPTIMIST", "Puck")
-VOICE_SCEPTICUS = os.environ.get("DUO_VOICE_SCEPTICUS", "Pulcherrima")
+VOICE_CRITICUS = os.environ.get("DUO_VOICE_CRITICUS", "Pulcherrima")
 TTS_MODEL = os.environ.get("DUO_TTS_MODEL", "gemini-2.5-flash-preview-tts")
 TTS_SAMPLE_RATE = 24_000
 TTS_CHANNELS = 1
@@ -127,10 +127,10 @@ wel stellig.
     + CONVERSATION_BASE
 )
 
-SCEPTICUS_PROMPT = (
+CRITICUS_PROMPT = (
     """# Identiteit
 
-Je bent **De Scepticus**. Niet anti-AI — wel bezorgd. Je merkt dat je
+Je bent **De Criticus**. Niet anti-AI — wel bezorgd. Je merkt dat je
 zelf minder nadenkt, dat je collega's hetzelfde mailtje sturen als jij,
 dat alles op elkaar gaat lijken. Je bent geen drama-koningin, je bent
 gewoon scherp en eerlijk.
@@ -239,7 +239,7 @@ def _gemini_generate(
 
 
 def _fallback_reply(persona_prompt: str, history: list[dict], topic: str) -> str:
-    role = "Optimist" if "Optimist" in persona_prompt else "Scepticus"
+    role = "Optimist" if "Optimist" in persona_prompt else "Criticus"
     if role == "Optimist":
         return random.choice(
             [
@@ -460,7 +460,7 @@ async def _next_topic(bus: ConversationBus, topics: list[dict]) -> dict:
 
 async def _run_loop(
     optimist: SpeakerContext,
-    scepticus: SpeakerContext,
+    criticus: SpeakerContext,
     config: dict,
     stop_event: asyncio.Event,
 ) -> None:
@@ -508,12 +508,12 @@ async def _run_loop(
         return reply_text, pcm
 
     # Eerste turn: bereid synchroon voor.
-    current = optimist if bus.current_speaker == "optimist" else scepticus
+    current = optimist if bus.current_speaker == "optimist" else criticus
     next_text, next_pcm = await _prepare_turn(current)
 
     while not stop_event.is_set():
-        speaker = optimist if bus.current_speaker == "optimist" else scepticus
-        other = scepticus if speaker is optimist else optimist
+        speaker = optimist if bus.current_speaker == "optimist" else criticus
+        other = criticus if speaker is optimist else optimist
 
         reply_text = next_text
         reply_pcm = next_pcm
@@ -576,11 +576,11 @@ async def main() -> None:
         persona_prompt=OPTIMIST_PROMPT,
         room_name=args.room,
     )
-    scepticus = await _setup_speaker(
-        name="scepticus",
-        label="De Scepticus",
-        voice_id=VOICE_SCEPTICUS,
-        persona_prompt=SCEPTICUS_PROMPT,
+    criticus = await _setup_speaker(
+        name="criticus",
+        label="De Criticus",
+        voice_id=VOICE_CRITICUS,
+        persona_prompt=CRITICUS_PROMPT,
         room_name=args.room,
     )
 
@@ -598,12 +598,12 @@ async def main() -> None:
             signal.signal(sig, _handle_signal)
 
     try:
-        await _run_loop(optimist, scepticus, config, stop_event)
+        await _run_loop(optimist, criticus, config, stop_event)
     finally:
         logger.info("disconnecting")
         await asyncio.gather(
             optimist.room.disconnect(),
-            scepticus.room.disconnect(),
+            criticus.room.disconnect(),
             return_exceptions=True,
         )
 

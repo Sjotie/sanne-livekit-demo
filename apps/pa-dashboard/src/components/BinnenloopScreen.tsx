@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   RemoteAudioTrack,
   RemoteParticipant,
-  RemoteTrack,
   RemoteTrackPublication,
   Room,
   RoomEvent,
@@ -10,27 +9,31 @@ import {
 } from "livekit-client";
 import "./binnenloop.css";
 
-type Screen = "optimist" | "scepticus";
+type Screen = "optimist" | "criticus";
 
-const PERSONA: Record<Screen, { label: string; role: string; accent: string }> =
-  {
-    optimist: {
-      label: "De Optimist",
-      role: "AI maakt ons slimmer.",
-      accent: "var(--sanne-yellow)",
-    },
-    scepticus: {
-      label: "De Scepticus",
-      role: "Of toch niet?",
-      accent: "var(--sanne-purple)",
-    },
-  };
-
-interface TranscriptLine {
-  speaker: Screen;
-  text: string;
-  ts: number;
-}
+const PALETTE: Record<
+  Screen,
+  { label: string; sub: string; color: string; glow: string; soft: string; bgGradient: string }
+> = {
+  optimist: {
+    label: "Optimist",
+    sub: "warme stem",
+    color: "#ffe082",
+    glow: "rgba(255, 224, 130, 0.5)",
+    soft: "rgba(255, 224, 130, 0.18)",
+    bgGradient:
+      "radial-gradient(110% 100% at 50% 35%, rgba(255,224,130,0.12) 0%, transparent 55%), #0a0820",
+  },
+  criticus: {
+    label: "Criticus",
+    sub: "koele stem",
+    color: "#b6a7ff",
+    glow: "rgba(182, 167, 255, 0.55)",
+    soft: "rgba(109, 86, 249, 0.22)",
+    bgGradient:
+      "radial-gradient(110% 100% at 50% 35%, rgba(154,141,233,0.18) 0%, transparent 55%), #0a0820",
+  },
+};
 
 interface DuoTokenResponse {
   participant_token: string;
@@ -39,25 +42,156 @@ interface DuoTokenResponse {
   screen: string;
 }
 
+interface MimicProps {
+  level: number; // 0..1 — actuele audio-amplitude
+  color: string;
+  glow: string;
+  t: number;
+}
+
+// ─── Mimic: ringen reageren op echte audio-amplitude + subtiele heartbeat ───
+function Mimic({ level, color, glow, t }: MimicProps) {
+  // Idle "heartbeat": twee maten per cyclus, kleine puls.
+  const heartbeat =
+    0.5 * Math.pow(Math.max(0, Math.sin(t * 1.6)), 6) +
+    0.25 * Math.pow(Math.max(0, Math.sin(t * 1.6 + 0.6)), 8);
+  // Articulatie-kruidje voor wanneer er audio is — voorkomt vlakke ringen.
+  const flutter = (Math.sin(t * 13.7 + 0.4) + 1) / 2;
+
+  let amp: number;
+  if (level > 0.04) {
+    // Audio aanwezig → ringen reageren grotendeels op het echte volume,
+    // met een lichte microtremoring zodat het niet plastisch oogt.
+    amp = Math.min(1, 0.28 + level * 0.85 + flutter * 0.06);
+  } else {
+    // Stilte → subtiele heartbeat ipv vlakke statische ringen.
+    amp = 0.16 + heartbeat * 0.12;
+  }
+
+  const baseR = 70;
+  const rings = [
+    { r: baseR + amp * 24, border: 2.5, opacity: 0.95 },
+    { r: baseR + amp * 60, border: 2, opacity: 0.6 },
+    { r: baseR + amp * 110, border: 1.5, opacity: 0.38 },
+    { r: baseR + amp * 175, border: 1.2, opacity: 0.22 },
+    { r: baseR + amp * 250, border: 1, opacity: 0.12 },
+  ];
+
+  return (
+    <div className="mimic-wrap">
+      {rings.map((ring, i) => (
+        <div
+          key={i}
+          className="ring"
+          style={{
+            width: ring.r * 2,
+            height: ring.r * 2,
+            border: `${ring.border}px solid ${color}`,
+            background: "transparent",
+            opacity: ring.opacity,
+            boxShadow: i === 0 ? `0 0 ${30 + amp * 60}px ${glow}` : "none",
+            transition:
+              "width 60ms linear, height 60ms linear, box-shadow 60ms linear",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function BinnenloopScreen({ screen }: { screen: Screen }) {
-  const persona = PERSONA[screen];
+  const persona = PALETTE[screen];
   const [status, setStatus] = useState<
     "idle" | "connecting" | "connected" | "waiting"
   >("idle");
-  const [lines, setLines] = useState<TranscriptLine[]>([]);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [currentLine, setCurrentLine] = useState<string>("");
+  const [transcriptVisible, setTranscriptVisible] = useState(false);
+  const [t, setTime] = useState(0);
+  const audioContainerRef = useRef<HTMLDivElement | null>(null);
   const roomRef = useRef<Room | null>(null);
   const retryRef = useRef<number | null>(null);
 
+  // WebAudio analyser leest actual audio bytes (werkt onafhankelijk van
+  // LiveKit's dominant-speaker detection — Aoede valt vaak onder de SFU
+  // threshold waardoor LiveKit audioLevel 0 blijft).
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
+  const [level, setLevel] = useState(0);
+  const [audioBlocked, setAudioBlocked] = useState(false);
+
   const ownIdentity = useMemo(() => `agent-${screen}`, [screen]);
+
+  // RAF: tick + AnalyserNode RMS polling, met perceptuele tuning.
+  useEffect(() => {
+    let raf = 0;
+    let last = performance.now();
+    const buf = new Uint8Array(1024);
+    let smooth = 0;
+    const tick = (now: number) => {
+      const dt = (now - last) / 1000;
+      last = now;
+      setTime((p) => p + dt);
+
+      let target = 0;
+      const a = analyserRef.current;
+      if (a) {
+        a.getByteTimeDomainData(buf);
+        let sumSq = 0;
+        for (let i = 0; i < buf.length; i++) {
+          const v = (buf[i] - 128) / 128;
+          sumSq += v * v;
+        }
+        const rms = Math.sqrt(sumSq / buf.length); // typisch 0..0.3 voor TTS
+        // Perceptuele compressie met sqrt zodat zachte stukjes ook
+        // beweging geven; voorkomt lineaire saturatie.
+        target = Math.min(1, Math.sqrt(rms * 4));
+      }
+      // Asymmetrische smoothing: snel omhoog, trager omlaag (natural decay).
+      const alpha = target > smooth ? 0.45 : 0.12;
+      smooth = smooth + (target - smooth) * alpha;
+      setLevel(smooth);
+
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  const attachAnalyser = useCallback((track: RemoteAudioTrack) => {
+    try {
+      const stream = new MediaStream([track.mediaStreamTrack]);
+      const ctx =
+        audioCtxRef.current ??
+        new (window.AudioContext ||
+          (window as unknown as { webkitAudioContext: typeof AudioContext })
+            .webkitAudioContext)();
+      audioCtxRef.current = ctx;
+      ctx.resume().catch(() => {});
+
+      if (sourceRef.current) {
+        try {
+          sourceRef.current.disconnect();
+        } catch {
+          /* ignore */
+        }
+      }
+      const source = ctx.createMediaStreamSource(stream);
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 1024;
+      analyser.smoothingTimeConstant = 0.7;
+      source.connect(analyser);
+      sourceRef.current = source;
+      analyserRef.current = analyser;
+    } catch (e) {
+      console.warn("AnalyserNode setup faalde:", e);
+    }
+  }, []);
 
   const connect = useCallback(async () => {
     setStatus("connecting");
     try {
-      const res = await fetch(
-        `/duo-token?screen=${screen}&room=binnenloop`
-      );
+      const res = await fetch(`/duo-token?screen=${screen}&room=binnenloop`);
       if (!res.ok) throw new Error(`token http ${res.status}`);
       const ct = res.headers.get("content-type") ?? "";
       if (!ct.includes("application/json")) {
@@ -73,28 +207,21 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
           participant.identity === ownIdentity &&
           track.kind === Track.Kind.Audio
         ) {
-          const audioEl = (track as RemoteAudioTrack).attach();
+          const audio = track as RemoteAudioTrack;
+          const audioEl = audio.attach() as HTMLAudioElement;
           audioEl.autoplay = true;
+          audioEl.muted = false;
+          audioEl.playsInline = true;
           audioEl.style.display = "none";
-          if (audioRef.current?.parentElement) {
-            audioRef.current.parentElement.appendChild(audioEl);
-          } else {
-            document.body.appendChild(audioEl);
-          }
-          (track as RemoteAudioTrack).on("muted", () => setIsSpeaking(false));
-          (track as RemoteAudioTrack).on("unmuted", () => setIsSpeaking(true));
+          (audioContainerRef.current ?? document.body).appendChild(audioEl);
+          // Probeer expliciet te starten — autoplay kan stilletjes geblokt
+          // zijn na een refresh zonder user gesture.
+          audioEl.play().catch((err) => {
+            console.warn("autoplay geblokkeerd, wacht op tap:", err);
+            setAudioBlocked(true);
+          });
         }
       });
-
-      room.on(
-        RoomEvent.ActiveSpeakersChanged,
-        (speakers: RemoteParticipant[] | { identity?: string }[]) => {
-          const speaking = speakers.some(
-            (p) => "identity" in p && p.identity === ownIdentity
-          );
-          setIsSpeaking(speaking);
-        }
-      );
 
       room.on(
         RoomEvent.DataReceived,
@@ -102,20 +229,16 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
           if (topic && topic !== "duo") return;
           try {
             const msg = JSON.parse(new TextDecoder().decode(payload));
-            if (msg?.type === "transcript" && typeof msg.text === "string") {
-              setLines((prev) =>
-                [
-                  ...prev,
-                  {
-                    speaker: msg.speaker as Screen,
-                    text: msg.text as string,
-                    ts: Date.now(),
-                  },
-                ].slice(-12)
-              );
+            if (msg?.type !== "transcript" || typeof msg.text !== "string") return;
+            if (msg.speaker === screen) {
+              setCurrentLine(msg.text);
+              setTranscriptVisible(true);
+            } else {
+              // Ander spreekt nu → onze regel netjes uitfaden.
+              setTranscriptVisible(false);
             }
           } catch {
-            // ignore malformed
+            /* ignore */
           }
         }
       );
@@ -127,7 +250,6 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
       });
       setStatus("connected");
 
-      // Forceer subscribe op alle bestaande participants.
       room.remoteParticipants.forEach((p) => {
         p.trackPublications.forEach((pub) => {
           if (
@@ -139,7 +261,7 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
         });
       });
     } catch (e) {
-      console.warn("BinnenloopScreen connect failed, retrying:", e);
+      console.warn("BinnenloopScreen connect retry:", e);
       setStatus("waiting");
       retryRef.current = window.setTimeout(() => connect(), 4000);
     }
@@ -154,37 +276,50 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
     };
   }, [connect]);
 
-  const lastOwn = [...lines].reverse().find((l) => l.speaker === screen);
-  const lastOther = [...lines].reverse().find((l) => l.speaker !== screen);
+  // Click/tap-to-unlock voor autoplay (één user gesture is genoeg).
+  const handleUnlock = useCallback(() => {
+    const els = audioContainerRef.current?.querySelectorAll("audio");
+    let unlocked = true;
+    els?.forEach((el) => {
+      try {
+        const p = (el as HTMLAudioElement).play();
+        if (p && typeof p.then === "function") {
+          p.catch(() => {
+            unlocked = false;
+          });
+        }
+      } catch {
+        unlocked = false;
+      }
+    });
+    if (unlocked) setAudioBlocked(false);
+  }, []);
+
+  const isSpeaking = level > 0.04;
 
   return (
     <div
-      className="binnenloop"
-      style={{ ["--persona-accent" as string]: persona.accent }}
+      className={`binnenloop binnenloop-${screen}`}
+      style={{ background: persona.bgGradient }}
+      onClick={handleUnlock}
     >
-      <div className="binnenloop-eyebrow">Binnenloop · This is not AI</div>
-
-      <div className="binnenloop-stage">
-        <div className={`binnenloop-orb ${isSpeaking ? "speaking" : ""}`}>
-          <div className="binnenloop-orb-core" />
-          <div className="binnenloop-orb-glow" />
-        </div>
-
-        <div className="binnenloop-meta">
-          <h1>{persona.label}</h1>
-          <p>{persona.role}</p>
-        </div>
+      <div className="binnenloop-label">
+        {persona.sub}
+        <span className={`binnenloop-name ${screen}`}>{persona.label}</span>
       </div>
 
-      <div className="binnenloop-captions">
-        {lastOwn && (
-          <p className="binnenloop-caption-self">{lastOwn.text}</p>
-        )}
-        {lastOther && (
-          <p className="binnenloop-caption-other">
-            <span>{PERSONA[lastOther.speaker].label}:</span> {lastOther.text}
-          </p>
-        )}
+      <Mimic level={level} color={persona.color} glow={persona.glow} t={t} />
+
+      <div
+        className={`binnenloop-transcript ${
+          transcriptVisible && currentLine ? "show" : ""
+        }`}
+      >
+        <span className="quote">"{currentLine || ""}"</span>
+      </div>
+
+      <div className="binnenloop-speaking-tag">
+        {isSpeaking ? "aan het woord" : "luistert"}
       </div>
 
       <div className={`binnenloop-status status-${status}`}>
@@ -194,7 +329,17 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
         {status === "waiting" && "wacht op verbinding"}
       </div>
 
-      <audio ref={audioRef} hidden />
+      {audioBlocked && (
+        <button
+          type="button"
+          className="binnenloop-unlock"
+          onClick={handleUnlock}
+        >
+          tik voor geluid
+        </button>
+      )}
+
+      <div ref={audioContainerRef} hidden />
     </div>
   );
 }

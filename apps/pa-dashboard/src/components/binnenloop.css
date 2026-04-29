@@ -1,188 +1,187 @@
-/* ─── Binnenloop fullscreen view (één scherm = één persona) ───────────────
-   Twee laptops: per laptop ?screen=optimist of ?screen=scepticus.
-   Output via screen-share naar lage-resolutie monitor.
-   Daarom: zeer grote typo, maximaal contrast, minimaal UI-meubilair. */
+/* ─── Binnenloop fullscreen view per persona ───────────────────────────────
+   Gebaseerd op het design van de designer (Two Agents.html).
+   Eén scherm = één persona. Twee laptops, twee screens, screen-share naar
+   verticale low-res monitor in de zaal. */
 
 .binnenloop {
   position: fixed;
   inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 6vh 6vw;
-  background:
-    radial-gradient(80% 80% at 50% 30%,
-      color-mix(in srgb, var(--persona-accent, #6d56f9) 28%, transparent) 0%,
-      transparent 60%),
-    linear-gradient(160deg, #0d0a2b, #1a1448);
-  color: #fefffb;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
   font-family: "Avenir LT Std", "Helvetica Neue", system-ui, sans-serif;
+  color: rgba(255, 255, 255, 0.92);
+  isolation: isolate;
 }
 
-.binnenloop-eyebrow {
+/* ─── Eyebrow + grote naam ─── */
+.binnenloop-label {
   position: absolute;
-  top: 4vh;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: clamp(14px, 1.3vw, 22px);
-  letter-spacing: 0.4em;
+  top: 64px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(254, 255, 251, 0.5);
-  font-weight: 500;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  z-index: 2;
 }
 
-.binnenloop-stage {
+.binnenloop-name {
+  display: block;
+  margin-top: 12px;
+  font-size: clamp(44px, 6vw, 96px);
+  letter-spacing: -0.025em;
+  font-weight: 900;
+  text-transform: none;
+  line-height: 1;
+}
+
+.binnenloop-name.optimist {
+  color: #ffe082;
+}
+
+.binnenloop-name.criticus {
+  color: #b6a7ff;
+}
+
+/* ─── Mimic — concentric rings ─── */
+.mimic-wrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4vh;
-  flex: 1;
   justify-content: center;
 }
 
-.binnenloop-orb {
-  position: relative;
-  width: clamp(220px, 36vw, 460px);
-  aspect-ratio: 1 / 1;
-  display: grid;
-  place-items: center;
-}
-
-.binnenloop-orb-core {
+.ring {
   position: absolute;
-  inset: 18%;
-  border-radius: 999px;
-  background: radial-gradient(circle at 35% 35%,
-    rgba(254, 255, 251, 0.95),
-    var(--persona-accent, #6d56f9) 45%,
-    color-mix(in srgb, var(--persona-accent, #6d56f9) 30%, #0d0a2b 70%) 100%);
-  filter: saturate(1.1);
-  transition: transform 0.4s ease;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
-.binnenloop-orb-glow {
+/* ─── Transcript onder de ringen ─── */
+.binnenloop-transcript {
   position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  background: radial-gradient(circle,
-    color-mix(in srgb, var(--persona-accent, #6d56f9) 60%, transparent) 0%,
-    transparent 65%);
-  filter: blur(38px);
-  opacity: 0.55;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.binnenloop-orb.speaking .binnenloop-orb-core {
-  animation: binnenloop-pulse 1.6s ease-in-out infinite;
-}
-
-.binnenloop-orb.speaking .binnenloop-orb-glow {
-  opacity: 0.9;
-  animation: binnenloop-glow 1.6s ease-in-out infinite;
-}
-
-@keyframes binnenloop-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.06); }
-}
-
-@keyframes binnenloop-glow {
-  0%, 100% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.1); opacity: 1; }
-}
-
-.binnenloop-meta {
+  left: 48px;
+  right: 48px;
+  bottom: 110px;
   text-align: center;
-}
-
-.binnenloop-meta h1 {
-  font-family: "Avenir LT Std", sans-serif;
-  font-weight: 900;
-  font-size: clamp(56px, 7.2vw, 128px);
-  line-height: 1;
-  letter-spacing: -0.03em;
-  margin: 0;
-}
-
-.binnenloop-meta p {
-  font-family: "Avenir LT Std", sans-serif;
-  font-weight: 400;
-  font-size: clamp(20px, 2vw, 36px);
-  margin: 1.6vh 0 0;
-  color: rgba(254, 255, 251, 0.65);
-}
-
-.binnenloop-captions {
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.6vh;
-  margin-top: 2vh;
-}
-
-.binnenloop-caption-self {
-  font-family: "Avenir LT Std", sans-serif;
+  font-size: clamp(20px, 2.4vw, 32px);
   font-weight: 500;
-  font-size: clamp(22px, 2.4vw, 38px);
-  line-height: 1.35;
-  color: #fefffb;
+  line-height: 1.32;
+  letter-spacing: -0.012em;
+  color: rgba(255, 255, 255, 0.92);
+  text-wrap: pretty;
+  opacity: 0;
+  transition: opacity 380ms ease;
+  z-index: 2;
+}
+
+.binnenloop-transcript.show {
+  opacity: 1;
+}
+
+.binnenloop-transcript .quote {
+  display: inline;
+}
+
+/* ─── Speaking-tag onderaan ─── */
+.binnenloop-speaking-tag {
+  position: absolute;
+  bottom: 56px;
+  left: 0;
+  right: 0;
   text-align: center;
-  margin: 0;
-  text-wrap: balance;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.3);
+  z-index: 2;
 }
 
-.binnenloop-caption-other {
-  font-family: "Avenir LT Std", sans-serif;
-  font-weight: 400;
-  font-size: clamp(16px, 1.6vw, 24px);
-  line-height: 1.4;
-  color: rgba(254, 255, 251, 0.45);
-  text-align: center;
-  margin: 0;
-  text-wrap: balance;
-}
-
-.binnenloop-caption-other span {
-  color: rgba(254, 255, 251, 0.8);
-  font-weight: 500;
-  margin-right: 6px;
-}
-
+/* ─── Verbinding-status (klein, rechtsonder, niet storend) ─── */
 .binnenloop-status {
   position: absolute;
-  bottom: 3vh;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: clamp(11px, 1vw, 14px);
+  bottom: 16px;
+  right: 24px;
+  font-size: 10px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: rgba(254, 255, 251, 0.35);
+  color: rgba(255, 255, 255, 0.25);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  z-index: 3;
 }
 
 .binnenloop-status.status-connected {
-  color: var(--sanne-yellow, #d6ff02);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .binnenloop-status::before {
   content: "";
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 999px;
   background: currentColor;
-  box-shadow: 0 0 12px currentColor;
 }
 
-.binnenloop-status.status-connecting::before {
+.binnenloop-status.status-connecting::before,
+.binnenloop-status.status-waiting::before {
   animation: binnenloop-blink 1.2s ease-in-out infinite;
 }
 
 @keyframes binnenloop-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* ─── Unlock-overlay (autoplay-block) ─── */
+.binnenloop-unlock {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 8, 32, 0.55);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border: 0;
+  cursor: pointer;
+  font-family: "Avenir LT Std", "Helvetica Neue", system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 200ms ease, opacity 200ms ease;
+}
+
+.binnenloop-unlock:hover {
+  background: rgba(10, 8, 32, 0.7);
+}
+
+.binnenloop-unlock:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.5);
+  outline-offset: -8px;
 }

@@ -28,13 +28,16 @@ export default function App() {
   const activeDemo = DEMOS.find((demo) => demo.id === activeDemoId) ?? DEMOS[0];
 
   // Binnenloop-modus: één persona per laptop, fullscreen, geen Werkbank.
-  // URL-vorm: /?screen=optimist  of  /?screen=scepticus
+  // URL-vorm: /?screen=optimist  of  /?screen=criticus
+  // (?screen=scepticus blijft werken als alias voor backward compat.)
   const screenParam =
     typeof window !== "undefined"
       ? new URLSearchParams(window.location.search).get("screen")
       : null;
-  if (screenParam === "optimist" || screenParam === "scepticus") {
-    return <BinnenloopScreen screen={screenParam} />;
+  const normalizedScreen =
+    screenParam === "scepticus" ? "criticus" : screenParam;
+  if (normalizedScreen === "optimist" || normalizedScreen === "criticus") {
+    return <BinnenloopScreen screen={normalizedScreen} />;
   }
 
   return (
