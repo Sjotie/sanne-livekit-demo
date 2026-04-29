@@ -14,6 +14,8 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       "/token": "http://localhost:1421",
+      "/duo-token": "http://localhost:1421",
+      "/health": "http://localhost:1421",
     },
   },
   build: {

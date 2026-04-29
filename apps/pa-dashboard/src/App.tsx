@@ -1,5 +1,6 @@
 import { useState } from "react";
 import VoiceSession from "./components/VoiceSession";
+import BinnenloopScreen from "./components/BinnenloopScreen";
 
 const DEMOS = [
   {
@@ -25,6 +26,16 @@ const DEMOS = [
 export default function App() {
   const [activeDemoId, setActiveDemoId] = useState(DEMOS[0].id);
   const activeDemo = DEMOS.find((demo) => demo.id === activeDemoId) ?? DEMOS[0];
+
+  // Binnenloop-modus: één persona per laptop, fullscreen, geen Werkbank.
+  // URL-vorm: /?screen=optimist  of  /?screen=scepticus
+  const screenParam =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("screen")
+      : null;
+  if (screenParam === "optimist" || screenParam === "scepticus") {
+    return <BinnenloopScreen screen={screenParam} />;
+  }
 
   return (
     <div className="app">

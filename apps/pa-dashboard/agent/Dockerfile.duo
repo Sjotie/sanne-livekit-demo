@@ -1,0 +1,27 @@
+FROM python:3.11-slim
+
+# System deps voor numpy / livekit-rtc wheels.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    build-essential \
+    libportaudio2 \
+    libsndfile1 \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir uv
+
+WORKDIR /app
+
+COPY pyproject.toml ./
+COPY duo_agent.py ./
+COPY duo_topics.example.json ./
+
+# duo_topics.json wordt op Railway via env-var DUO_TOPICS_JSON geladen.
+# Optioneel mag een echte duo_topics.json mee worden gebakken in een interne
+# build, maar in onze publieke repo zit alleen het example.
+
+RUN uv pip install --system --no-cache -e .
+
+CMD ["python", "duo_agent.py"]

@@ -1,0 +1,188 @@
+/* ─── Binnenloop fullscreen view (één scherm = één persona) ───────────────
+   Twee laptops: per laptop ?screen=optimist of ?screen=scepticus.
+   Output via screen-share naar lage-resolutie monitor.
+   Daarom: zeer grote typo, maximaal contrast, minimaal UI-meubilair. */
+
+.binnenloop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6vh 6vw;
+  background:
+    radial-gradient(80% 80% at 50% 30%,
+      color-mix(in srgb, var(--persona-accent, #6d56f9) 28%, transparent) 0%,
+      transparent 60%),
+    linear-gradient(160deg, #0d0a2b, #1a1448);
+  color: #fefffb;
+  overflow: hidden;
+  font-family: "Avenir LT Std", "Helvetica Neue", system-ui, sans-serif;
+}
+
+.binnenloop-eyebrow {
+  position: absolute;
+  top: 4vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(14px, 1.3vw, 22px);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(254, 255, 251, 0.5);
+  font-weight: 500;
+}
+
+.binnenloop-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4vh;
+  flex: 1;
+  justify-content: center;
+}
+
+.binnenloop-orb {
+  position: relative;
+  width: clamp(220px, 36vw, 460px);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+}
+
+.binnenloop-orb-core {
+  position: absolute;
+  inset: 18%;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 35%,
+    rgba(254, 255, 251, 0.95),
+    var(--persona-accent, #6d56f9) 45%,
+    color-mix(in srgb, var(--persona-accent, #6d56f9) 30%, #0d0a2b 70%) 100%);
+  filter: saturate(1.1);
+  transition: transform 0.4s ease;
+}
+
+.binnenloop-orb-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--persona-accent, #6d56f9) 60%, transparent) 0%,
+    transparent 65%);
+  filter: blur(38px);
+  opacity: 0.55;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.binnenloop-orb.speaking .binnenloop-orb-core {
+  animation: binnenloop-pulse 1.6s ease-in-out infinite;
+}
+
+.binnenloop-orb.speaking .binnenloop-orb-glow {
+  opacity: 0.9;
+  animation: binnenloop-glow 1.6s ease-in-out infinite;
+}
+
+@keyframes binnenloop-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+@keyframes binnenloop-glow {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.1); opacity: 1; }
+}
+
+.binnenloop-meta {
+  text-align: center;
+}
+
+.binnenloop-meta h1 {
+  font-family: "Avenir LT Std", sans-serif;
+  font-weight: 900;
+  font-size: clamp(56px, 7.2vw, 128px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.binnenloop-meta p {
+  font-family: "Avenir LT Std", sans-serif;
+  font-weight: 400;
+  font-size: clamp(20px, 2vw, 36px);
+  margin: 1.6vh 0 0;
+  color: rgba(254, 255, 251, 0.65);
+}
+
+.binnenloop-captions {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6vh;
+  margin-top: 2vh;
+}
+
+.binnenloop-caption-self {
+  font-family: "Avenir LT Std", sans-serif;
+  font-weight: 500;
+  font-size: clamp(22px, 2.4vw, 38px);
+  line-height: 1.35;
+  color: #fefffb;
+  text-align: center;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.binnenloop-caption-other {
+  font-family: "Avenir LT Std", sans-serif;
+  font-weight: 400;
+  font-size: clamp(16px, 1.6vw, 24px);
+  line-height: 1.4;
+  color: rgba(254, 255, 251, 0.45);
+  text-align: center;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.binnenloop-caption-other span {
+  color: rgba(254, 255, 251, 0.8);
+  font-weight: 500;
+  margin-right: 6px;
+}
+
+.binnenloop-status {
+  position: absolute;
+  bottom: 3vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(11px, 1vw, 14px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(254, 255, 251, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.binnenloop-status.status-connected {
+  color: var(--sanne-yellow, #d6ff02);
+}
+
+.binnenloop-status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 12px currentColor;
+}
+
+.binnenloop-status.status-connecting::before {
+  animation: binnenloop-blink 1.2s ease-in-out infinite;
+}
+
+@keyframes binnenloop-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}

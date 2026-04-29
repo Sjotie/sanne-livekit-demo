@@ -104,6 +104,48 @@ Bun.serve({
       return new Response("ok", { headers: CORS_HEADERS });
     }
 
+    if (url.pathname === "/duo-token") {
+      // Token voor het Binnenloop-scherm: subscribe-only, geen agent dispatch.
+      const params = new URL(req.url).searchParams;
+      const screen = params.get("screen") ?? "viewer";
+      const room = params.get("room") ?? "binnenloop";
+      const identity = `screen-${screen}-${Date.now()}`;
+      try {
+        const at = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET, {
+          identity,
+          ttl: 60 * 60 * 8,
+        });
+        at.addGrant({
+          room,
+          roomJoin: true,
+          canPublish: false,
+          canSubscribe: true,
+          canPublishData: true,
+        });
+        const accessToken = await at.toJwt();
+        return new Response(
+          JSON.stringify({
+            participant_token: accessToken,
+            server_url: LIVEKIT_URL,
+            room,
+            screen,
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json",
+              ...CORS_HEADERS,
+            },
+          }
+        );
+      } catch (e) {
+        console.error("Duo-token failed:", e);
+        return new Response(
+          JSON.stringify({ error: "duo token generation failed" }),
+          { status: 500, headers: { "Content-Type": "application/json", ...CORS_HEADERS } }
+        );
+      }
+    }
+
     if (url.pathname === "/token") {
       let agentName = "pa";
       if (req.method === "POST") {

@@ -38,6 +38,12 @@ dist/
 *.pcm
 data/podcast-66/66-me-myself-ai-sanne-cornelissen-pt1.mp3
 
+# Embargo-content van het boek This is not AI — niet committen.
+data/this-is-not-ai.pdf
+data/this-is-not-ai.md
+data/this-is-not-ai.ocr.json
+apps/pa-dashboard/agent/duo_topics.json
+
 # OS/editor noise
 .DS_Store
 .idea/

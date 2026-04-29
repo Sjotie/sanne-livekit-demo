@@ -1,0 +1,26 @@
+{
+  "_comment": "Voorbeeld topics-bestand. Voor podiumdemo: kopieer dit naar duo_topics.json en vul summary + anchors met passages uit het boek (NIET committen — embargo). Of gebruik de DUO_TOPICS_JSON env-var op Railway.",
+  "boek_thema": "This is not AI van Sanne Cornelissen — over hoe je AI slim gebruikt zonder zelf op auto-piloot te gaan.",
+  "max_turns_per_topic": 8,
+  "pause_between_turns_ms": 700,
+  "topics": [
+    {
+      "title": "Hoe AI ons brein luier maakt",
+      "summary": "Beschrijving van het hoofdstuk — hier komen 1500 chars uit het boek.",
+      "anchors": [
+        "Eerste citeerbare zin uit het hoofdstuk.",
+        "Tweede citeerbare zin.",
+        "Derde citeerbare zin."
+      ]
+    },
+    {
+      "title": "Wanneer AI je denken overneemt",
+      "summary": "Beschrijving van het hoofdstuk.",
+      "anchors": [
+        "Eerste citeerbare zin.",
+        "Tweede citeerbare zin.",
+        "Derde citeerbare zin."
+      ]
+    }
+  ]
+}

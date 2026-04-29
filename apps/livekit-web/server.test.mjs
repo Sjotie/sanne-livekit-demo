@@ -74,6 +74,18 @@ describe("Werkbank draft visuals", () => {
   });
 });
 
+describe("Werkbank runtime scripts", () => {
+  test("pins browser dependencies without stale SRI hashes", () => {
+    const html = readFileSync(new URL("./public/werkbank/index.html", import.meta.url), "utf8");
+
+    expect(html).toContain("cdnjs.cloudflare.com/ajax/libs/react/18.3.1");
+    expect(html).toContain("cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1");
+    expect(html).toContain("cdn.jsdelivr.net/npm/@babel/standalone@7.29.0");
+    expect(html).not.toContain("unpkg.com/react/umd");
+    expect(html).not.toContain("integrity=");
+  });
+});
+
 describe("Werkbank agenda visuals", () => {
   test("keeps previous event time so moved calendar items are visible", () => {
     const app = readFileSync(new URL("./public/app.js", import.meta.url), "utf8");

@@ -32,7 +32,13 @@ class PAAgentContractTest(unittest.TestCase):
 
         good = pa_agent.GOOD_MODE_PROMPT
         bad = pa_agent.BAD_MODE_PROMPT
+        self.assertIn("Kernverschil", good)
+        self.assertIn("Beurt 1 moet altijd", good)
+        self.assertIn("Verboden in good mode", good)
         self.assertIn("Ik heb niks verstuurd", good)
+        self.assertIn("Kernverschil", bad)
+        self.assertIn("Beurt 1 moet duidelijk anders zijn dan good mode", bad)
+        self.assertIn("Verboden in bad mode", bad)
         self.assertIn("reply_to_email naar Spectrum", bad)
         self.assertIn("send_message naar Mama", bad)
 

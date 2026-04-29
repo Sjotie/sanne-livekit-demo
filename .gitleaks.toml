@@ -42,4 +42,6 @@ regexes = [
   '''Authorization":\s*"Bearer \$\{REACTBITS_LICENSE_KEY\}"''',
   '''https://unpkg\.com/[^"]+sha384-[A-Za-z0-9+/=]+''',
   '''https://cdn\.prod\.website-files\.com/[^"]+\.otf''',
+  '''cdnjs\.cloudflare\.com/ajax/libs''',
+  '''\?key=\{[A-Z_]+\}''',
 ]
