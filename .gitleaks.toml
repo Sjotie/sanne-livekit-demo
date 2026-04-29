@@ -1,0 +1,40 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "pocketbase-admin-token"
+description = "PocketBase admin authentication token"
+regex = '''(?i)(pb_auth|pocketbase[_-]?token|pb[_-]?admin[_-]?token)\s*[:=]\s*["']?[a-zA-Z0-9_\-\.]{20,}["']?'''
+tags = ["pocketbase", "token"]
+
+[[rules]]
+id = "jwt-token"
+description = "JWT token in code or docs"
+regex = '''eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}'''
+tags = ["jwt"]
+
+[[rules]]
+id = "hardcoded-curl-auth"
+description = "curl command with Authorization header containing a real token"
+regex = '''curl\s+.*-H\s+["']Authorization:\s*Bearer\s+[a-zA-Z0-9_\-\.]{20,}["']'''
+tags = ["curl", "auth"]
+
+[[rules]]
+id = "hardcoded-admin-password"
+description = "Admin password in scripts or docs"
+regex = '''(?i)(admin[_-]?pass(word)?|root[_-]?pass(word)?)\s*[:=]\s*["'][^"']{8,}["']'''
+tags = ["password", "admin"]
+
+[[rules]]
+id = "url-with-credentials"
+description = "URL with embedded username:password"
+regex = '''https?://[^:]+:[^@]+@[a-zA-Z0-9]'''
+tags = ["url", "credentials"]
+
+[allowlist]
+paths = [
+  '''\.env\.example$''',
+  '''\.env\.template$''',
+  '''__tests__/.*fixtures''',
+  '''test/.*fixtures''',
+]

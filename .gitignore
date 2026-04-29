@@ -30,7 +30,13 @@ __pycache__/
 
 # JavaScript
 node_modules/
+dist/
 *.tsbuildinfo
+
+# Generated archives / large raw captures
+*.zip
+*.pcm
+data/podcast-66/66-me-myself-ai-sanne-cornelissen-pt1.mp3
 
 # OS/editor noise
 .DS_Store
