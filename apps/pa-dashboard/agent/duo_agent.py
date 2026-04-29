@@ -62,14 +62,15 @@ ROOM_NAME = os.environ.get("DUO_ROOM_NAME", "binnenloop")
 VOICE_OPTIMIST = os.environ.get("DUO_VOICE_OPTIMIST", "Puck")
 VOICE_CRITICUS = os.environ.get("DUO_VOICE_CRITICUS", "Pulcherrima")
 TTS_MODEL = os.environ.get("DUO_TTS_MODEL", "gemini-2.5-flash-preview-tts")
-# Kill-switch endpoint van de bun-server. Als gezet pollt de agent
-# elke ~2s; bij paused=true skip hij turns (geen LLM/TTS-kosten).
-DUO_CONTROL_URL = os.environ.get(
-    "DUO_CONTROL_URL", "http://localhost:1421/duo-control"
-)
-# Hard plafond als nuclear option — voorkom dat de agent eindeloos draait
-# als het control-endpoint onbereikbaar is.
+# Hard plafond als nuclear option — 0 = uit. Pauze loopt nu via LiveKit
+# data-channel (zie running_event hieronder) zodat UI en agent altijd 1-op-1
+# in sync zijn.
 MAX_TOTAL_TURNS = int(os.environ.get("DUO_MAX_TOTAL_TURNS", "0") or 0)
+
+
+# Eén globale event als bron van waarheid: set = gesprek loopt, clear = pauze.
+running_event = asyncio.Event()
+running_event.set()
 TTS_SAMPLE_RATE = 24_000
 TTS_CHANNELS = 1
 TTS_SAMPLES_PER_FRAME = 480  # 20 ms @ 24 kHz
@@ -309,8 +310,16 @@ def _gemini_tts_pcm(text: str, voice_name: str) -> bytes:
     """Roep Gemini TTS aan, retourneer PCM 16-bit mono bytes @24 kHz."""
     if not GOOGLE_API_KEY:
         raise RuntimeError("GOOGLE_API_KEY ontbreekt")
+    # Directorial preamble: stuurt het accent richting Standaardnederlands
+    # (Aoede leunt anders soms naar Vlaams). Alleen de tekst NA de colon
+    # wordt uitgesproken — het deel ervoor is regie.
+    prompt_text = (
+        "Speak the following in clear Standard Dutch from the Netherlands "
+        "(Amsterdam accent), not Flemish or Belgian. Sound natural and "
+        "conversational: " + text
+    )
     payload = {
-        "contents": [{"parts": [{"text": text}]}],
+        "contents": [{"parts": [{"text": prompt_text}]}],
         "generationConfig": {
             "responseModalities": ["AUDIO"],
             "speechConfig": {
@@ -340,12 +349,22 @@ def _gemini_tts_pcm(text: str, voice_name: str) -> bytes:
     raise RuntimeError("Geen audio in Gemini TTS response")
 
 
-async def _push_pcm(speaker: SpeakerContext, pcm: bytes) -> None:
-    """Push PCM bytes als 20ms frames naar de audio-track."""
+async def _push_pcm(speaker: SpeakerContext, pcm: bytes) -> bool:
+    """Push PCM bytes als 20ms frames naar de audio-track.
+
+    Geeft False terug als hij midden in de turn werd onderbroken (pauze).
+    """
     if len(pcm) % 2 == 1:
         pcm = pcm[:-1]
     frame_bytes = TTS_SAMPLES_PER_FRAME * 2 * TTS_CHANNELS
     for i in range(0, len(pcm), frame_bytes):
+        if not running_event.is_set():
+            # Direct stoppen + queue legen → meteen stilte ipv 'na huidige zin'.
+            try:
+                speaker.audio_source.clear_queue()
+            except Exception:  # noqa: BLE001
+                pass
+            return False
         chunk = pcm[i : i + frame_bytes]
         if len(chunk) < frame_bytes:
             chunk = chunk + b"\x00" * (frame_bytes - len(chunk))
@@ -356,6 +375,7 @@ async def _push_pcm(speaker: SpeakerContext, pcm: bytes) -> None:
             samples_per_channel=TTS_SAMPLES_PER_FRAME,
         )
         await speaker.audio_source.capture_frame(frame)
+    return True
 
 
 async def _speak(speaker: SpeakerContext, text: str, pcm: bytes | None = None) -> None:
@@ -371,7 +391,9 @@ async def _speak(speaker: SpeakerContext, text: str, pcm: bytes | None = None) -
             logger.error("TTS failed for %s: %s", speaker.name, exc)
             return
 
-    await _push_pcm(speaker, pcm)
+    completed = await _push_pcm(speaker, pcm)
+    if not completed:
+        return  # was interrupted by pause; geen wait_for_playout (queue is leeg)
 
     try:
         await speaker.audio_source.wait_for_playout()
@@ -449,16 +471,74 @@ async def _setup_speaker(
 # ─── Conversation loop ─────────────────────────────────────────────────────
 
 
-def _check_paused() -> bool:
-    """Vraag de bun-server of het gesprek gepauzeerd is. Faalt stil → niet pauzeren."""
-    if not DUO_CONTROL_URL:
-        return False
-    try:
-        with urllib.request.urlopen(DUO_CONTROL_URL, timeout=2) as resp:
-            data = json.loads(resp.read().decode())
-        return bool(data.get("paused"))
-    except Exception:  # noqa: BLE001
-        return False
+async def _broadcast_state(rooms: list[rtc.Room]) -> None:
+    """Publiceer huidige paused-state via data-channel (topic 'control').
+
+    Beide agent-rooms broadcasten zodat alle UIs zeker een echo zien — ook
+    als één van de rooms in een schimmige reconnect-state zit.
+    """
+    payload = json.dumps(
+        {"type": "state", "paused": not running_event.is_set()}
+    ).encode("utf-8")
+    for room in rooms:
+        try:
+            await room.local_participant.publish_data(
+                payload, reliable=True, topic="control"
+            )
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("publish_data state failed: %s", exc)
+
+
+def _make_data_handler(rooms: list[rtc.Room]):
+    """Bouw een handler die UI-control-berichten verwerkt en state broadcastet."""
+
+    async def _process(action: str) -> None:
+        if action == "pause":
+            running_event.clear()
+            logger.info("[duo] PAUZE via UI")
+        elif action == "resume":
+            running_event.set()
+            logger.info("[duo] HERVAT via UI")
+        elif action == "toggle":
+            if running_event.is_set():
+                running_event.clear()
+                logger.info("[duo] PAUZE via UI (toggle)")
+            else:
+                running_event.set()
+                logger.info("[duo] HERVAT via UI (toggle)")
+        # 'query' krijgt alleen een state-echo, geen state-mutatie.
+        await _broadcast_state(rooms)
+
+    def _handler(*args: object) -> None:
+        # livekit-rtc kan signature variëren tussen versies; pak 'm robuust.
+        packet = args[0] if args else None
+        if packet is None:
+            return
+        data = getattr(packet, "data", None)
+        topic = getattr(packet, "topic", "") or ""
+        if not isinstance(data, (bytes, bytearray)):
+            return
+        if topic and topic != "control":
+            return
+        try:
+            msg = json.loads(bytes(data).decode("utf-8"))
+        except Exception:  # noqa: BLE001
+            return
+        if msg.get("type") != "control":
+            return
+        action = str(msg.get("action") or "")
+        asyncio.create_task(_process(action))
+
+    return _handler
+
+
+def _make_participant_handler(rooms: list[rtc.Room]):
+    """Op nieuwe deelnemer (= screen dat nu joint) meteen state broadcasten."""
+
+    def _handler(*_args: object) -> None:
+        asyncio.create_task(_broadcast_state(rooms))
+
+    return _handler
 
 
 async def _next_topic(bus: ConversationBus, topics: list[dict]) -> dict:
@@ -508,8 +588,17 @@ async def _run_loop(
         return out
 
     async def _prepare_turn(speaker: SpeakerContext) -> tuple[str, bytes | None]:
-        """Genereer LLM-reply én TTS-PCM in parallel met de andere speaker."""
+        """Genereer LLM-reply én TTS-PCM in parallel met de andere speaker.
+
+        Checkt running_event voor en tussen de calls — bij pauze stoppen we
+        zo vroeg mogelijk en besparen we LLM- of TTS-kosten waar mogelijk.
+        Een al-lopende HTTP-call kan niet meer afgebroken worden (in thread).
+        """
+        if not running_event.is_set():
+            return "", None
         history = await _build_history(speaker)
+        if not running_event.is_set():
+            return "", None
         reply_text = await asyncio.to_thread(
             _gemini_generate,
             speaker.persona_prompt,
@@ -518,6 +607,9 @@ async def _run_loop(
             bus.book_context(),
         )
         reply_text = reply_text.strip() or "Hmm. Even denken."
+        if not running_event.is_set():
+            # LLM al gebeurd, maar TTS overslaan scheelt nog een call.
+            return reply_text, None
         try:
             pcm = await asyncio.to_thread(
                 _gemini_tts_pcm, reply_text, speaker.voice_id
@@ -527,12 +619,16 @@ async def _run_loop(
             pcm = None
         return reply_text, pcm
 
+    async def _wait_running() -> None:
+        """Block tot het gesprek mag lopen (running_event = set)."""
+        if not running_event.is_set():
+            logger.info("[duo] gepauzeerd — wacht op resume")
+        await running_event.wait()
+
     # Wacht tot de pauze uit staat voordat we de eerste turn voorbereiden.
-    while not stop_event.is_set():
-        if not await asyncio.to_thread(_check_paused):
-            break
-        logger.info("[duo] gepauzeerd — wacht 3s")
-        await asyncio.sleep(3)
+    await _wait_running()
+    if stop_event.is_set():
+        return
 
     # Eerste turn: bereid synchroon voor.
     current = optimist if bus.current_speaker == "optimist" else criticus
@@ -540,12 +636,8 @@ async def _run_loop(
 
     total_turns = 0
     while not stop_event.is_set():
-        # Pauze-check vóór elke turn — dit voorkomt API-kosten.
-        while not stop_event.is_set():
-            if not await asyncio.to_thread(_check_paused):
-                break
-            logger.info("[duo] gepauzeerd — geen API-calls, wacht 3s")
-            await asyncio.sleep(3)
+        # Pauze-check vóór elke turn — geen API-kosten zolang paused.
+        await _wait_running()
         if stop_event.is_set():
             break
 
@@ -626,6 +718,19 @@ async def main() -> None:
         persona_prompt=CRITICUS_PROMPT,
         room_name=args.room,
     )
+
+    # Hang control-handlers op beide rooms zodat UI-knoppen via LiveKit
+    # data-channel direct de pause-state kunnen wisselen.
+    rooms = [optimist.room, criticus.room]
+    data_handler = _make_data_handler(rooms)
+    participant_handler = _make_participant_handler(rooms)
+    for room in rooms:
+        room.on("data_received", data_handler)
+        room.on("participant_connected", participant_handler)
+
+    # Initial broadcast: een UI die nu al verbonden is krijgt direct
+    # de actuele state.
+    await _broadcast_state(rooms)
 
     stop_event = asyncio.Event()
 

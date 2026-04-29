@@ -236,19 +236,31 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
       room.on(
         RoomEvent.DataReceived,
         (payload, _participant, _kind, topic) => {
-          if (topic && topic !== "duo") return;
+          let msg: any;
           try {
-            const msg = JSON.parse(new TextDecoder().decode(payload));
-            if (msg?.type !== "transcript" || typeof msg.text !== "string") return;
-            if (msg.speaker === screen) {
-              setCurrentLine(msg.text);
-              setTranscriptVisible(true);
-            } else {
-              // Ander spreekt nu → onze regel netjes uitfaden.
-              setTranscriptVisible(false);
-            }
+            msg = JSON.parse(new TextDecoder().decode(payload));
           } catch {
-            /* ignore */
+            return;
+          }
+          // ─── Pause-state echo van de agent (1-op-1 source of truth) ───
+          if (msg?.type === "state" && typeof msg.paused === "boolean") {
+            setPaused(msg.paused);
+            if (msg.paused) {
+              // Visueel ook direct "luistert" tonen — geen 1.5s hold-tail meer.
+              setTranscriptVisible(false);
+              setAudioActive(false);
+              lastVoiceTsRef.current = 0;
+            }
+            return;
+          }
+          // ─── Transcript-broadcasts ─────────────────────────────────────
+          if (topic && topic !== "duo") return;
+          if (msg?.type !== "transcript" || typeof msg.text !== "string") return;
+          if (msg.speaker === screen) {
+            setCurrentLine(msg.text);
+            setTranscriptVisible(true);
+          } else {
+            setTranscriptVisible(false);
           }
         }
       );
@@ -317,42 +329,25 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
     window.location.href = url.toString();
   };
 
-  // Sync paused-state met de bun-server bij mount + bij toggle.
-  useEffect(() => {
-    let active = true;
-    const sync = async () => {
-      try {
-        const r = await fetch("/duo-control");
-        if (!r.ok) return;
-        const data = await r.json();
-        if (active && typeof data.paused === "boolean") {
-          setPaused(data.paused);
-        }
-      } catch {
-        /* ignore */
-      }
-    };
-    sync();
-    const interval = window.setInterval(sync, 5000);
-    return () => {
-      active = false;
-      window.clearInterval(interval);
-    };
-  }, []);
-
-  const togglePause = async () => {
-    const next = !paused;
-    setPaused(next);
+  // Pauze loopt 1-op-1 via LiveKit data-channel (zie DataReceived hieronder).
+  // De UI muteert NOOIT zelf de paused-state — alleen de agent-echo doet dat.
+  const togglePause = useCallback(() => {
+    const room = roomRef.current;
+    if (!room) return;
+    const action = paused ? "resume" : "pause";
+    const payload = new TextEncoder().encode(
+      JSON.stringify({ type: "control", action })
+    );
     try {
-      await fetch("/duo-control", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paused: next }),
-      });
-    } catch {
-      /* ignore — sync zal volgende keer wel kloppen */
+      // Topic 'control' — zelfde topic als waar de agent op luistert.
+      const lp: any = room.localParticipant;
+      if (typeof lp.publishData === "function") {
+        lp.publishData(payload, { reliable: true, topic: "control" });
+      }
+    } catch (err) {
+      console.warn("publishData control faalde:", err);
     }
-  };
+  }, [paused]);
 
   return (
     <div
@@ -389,11 +384,11 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
       <div className="binnenloop-controls">
         <button
           type="button"
-          className={`binnenloop-pause ${paused ? "is-paused" : ""}`}
+          className={`binnenloop-pause ${paused ? "is-paused" : "is-running"}`}
           onClick={togglePause}
           title={paused ? "Hervat het gesprek" : "Pauzeer (geen API-kosten)"}
         >
-          {paused ? "▶ start" : "■ stop"}
+          {paused ? "▶ start gesprek" : "■ stop gesprek"}
         </button>
         <button
           type="button"
@@ -404,6 +399,7 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
           ↻ {otherLabel}
         </button>
       </div>
+
 
       {audioBlocked && (
         <button

@@ -188,14 +188,113 @@
   border-color: rgba(255, 255, 255, 0.25);
 }
 
+.binnenloop-pause.is-running {
+  background: rgba(255, 80, 80, 0.18);
+  border-color: rgba(255, 120, 120, 0.5);
+  color: #ffb3b3;
+}
+
+.binnenloop-pause.is-running:hover {
+  background: rgba(255, 80, 80, 0.32);
+  color: #ffffff;
+  border-color: rgba(255, 120, 120, 0.85);
+}
+
 .binnenloop-pause.is-paused {
-  background: rgba(214, 255, 2, 0.18);
-  border-color: rgba(214, 255, 2, 0.4);
-  color: #d6ff02;
+  background: rgba(214, 255, 2, 0.85);
+  border-color: rgba(214, 255, 2, 1);
+  color: #0a0820;
+  animation: binnenloop-pause-pulse 1.6s ease-in-out infinite;
 }
 
 .binnenloop-pause.is-paused:hover {
-  background: rgba(214, 255, 2, 0.28);
+  background: rgba(214, 255, 2, 1);
+  color: #0a0820;
+}
+
+@keyframes binnenloop-pause-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(214, 255, 2, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 14px rgba(214, 255, 2, 0);
+    background: rgba(255, 255, 255, 0.95);
+  }
+}
+
+/* ─── Grote "gepauzeerd"-banner — onmogelijk te missen ─── */
+.binnenloop-paused-banner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 36px 48px;
+  background: rgba(10, 8, 32, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(214, 255, 2, 0.35);
+  border-radius: 18px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(214, 255, 2, 0.18);
+}
+
+.binnenloop-paused-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: #d6ff02;
+  box-shadow: 0 0 30px rgba(214, 255, 2, 0.8);
+  animation: binnenloop-paused-blink 1.2s ease-in-out infinite;
+}
+
+@keyframes binnenloop-paused-blink {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+}
+
+.binnenloop-paused-text {
+  font-family: "Avenir LT Std", "Helvetica Neue", system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #d6ff02;
+}
+
+.binnenloop-paused-resume {
+  background: #d6ff02;
+  border: 0;
+  color: #0a0820;
+  font-family: "Avenir LT Std", "Helvetica Neue", system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 12px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 200ms ease, transform 100ms ease;
+}
+
+.binnenloop-paused-resume:hover {
+  background: #ffffff;
+}
+
+.binnenloop-paused-resume:active {
+  transform: scale(0.96);
 }
 
 .binnenloop-pause:focus-visible,
