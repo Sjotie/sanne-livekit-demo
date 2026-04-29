@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<title>This is not AI — Werkbank</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #0d0a2b; height: 100%; overflow: hidden; font-family: "Avenir LT Std", "Helvetica Neue", system-ui, sans-serif; }
+  #root { width: 100vw; height: 100vh; }
+  .stage-wrap {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: #0d0a2b;
+  }
+  .stage-scaler { transform-origin: center center; }
+
+  /* progress dots */
+  .nav {
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 10px; align-items: center;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    padding: 8px 14px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.12);
+    z-index: 50;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.7); font-weight: 600;
+  }
+  .nav button {
+    background: transparent; border: 0; color: rgba(255,255,255,0.7);
+    cursor: pointer; padding: 4px 8px; font-size: 14px;
+  }
+  .nav button:hover { color: #d6ff02; }
+  .dots { display: flex; gap: 6px; padding: 0 8px; }
+  .dot { width: 8px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; transition: background 200ms; }
+  .dot.active { background: #d6ff02; }
+  .dot.played { background: rgba(214,255,2,0.4); }
+
+  /* hint */
+  .hint {
+    position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); font-weight: 600;
+    z-index: 50;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/babel-standalone/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="werkbank-scenes.jsx"></script>
+<script type="text/babel" src="werkbank-stage.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+// Tweakable defaults
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "scene": 0,
+  "autoplay": false,
+  "autoplayMs": 2000,
+  "format": "tv"
+}/*EDITMODE-END*/;
+
+const FORMATS = {
+  podium: { width: 1920, height: 1080, label: "Podium 16:9" },
+  tv:     { width: 1600, height: 900,  label: "TV-tafel" },
+  vertical: { width: 1080, height: 1920, label: "Verticaal 9:16" },
+};
+
+function App() {
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [idx, setIdx] = useState(tweaks.scene || 0);
+  const [liveScene, setLiveScene] = useState(null);
+  const fmt = FORMATS[tweaks.format] || FORMATS.podium;
+  const total = window.WB_SCENES.length;
+  const scene = liveScene || window.WB_SCENES[idx];
+
+  // Persist scene index back to disk
+  useEffect(() => { setTweak("scene", idx); }, [idx]);
+
+  // Parent web app drives the visual canvas during LiveKit tool calls.
+  useEffect(() => {
+    function onMessage(event) {
+      const data = event.data || {};
+      if (data.type === "werkbank:set-scene" && data.scene) {
+        setLiveScene(data.scene);
+        return;
+      }
+      if (data.type !== "werkbank:set") return;
+      if (Number.isFinite(data.scene)) {
+        setIdx(Math.max(0, Math.min(total - 1, Number(data.scene))));
+      }
+      setLiveScene(null);
+    }
+    window.addEventListener("message", onMessage);
+    window.parent?.postMessage({ type: "werkbank:ready" }, "*");
+    return () => window.removeEventListener("message", onMessage);
+  }, [total]);
+
+  // Keyboard
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === "ArrowRight" || e.key === " " || e.key === "Enter") {
+        e.preventDefault();
+        setIdx((i) => Math.min(total - 1, i + 1));
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setIdx((i) => Math.max(0, i - 1));
+      } else if (e.key === "Home") {
+        setIdx(0);
+      } else if (e.key === "End") {
+        setIdx(total - 1);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [total]);
+
+  // Autoplay only applies to the standalone storyboard mode.
+  useEffect(() => {
+    if (liveScene) return;
+    if (!tweaks.autoplay) return;
+    const t = setTimeout(() => {
+      setIdx((i) => (i + 1) % total);
+    }, tweaks.autoplayMs);
+    return () => clearTimeout(t);
+  }, [idx, liveScene, tweaks.autoplay, tweaks.autoplayMs, total]);
+
+  // Scaling
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    function fit() {
+      const w = window.innerWidth || document.documentElement.clientWidth;
+      const h = window.innerHeight || document.documentElement.clientHeight;
+      if (!w || !h) return; // skip if iframe not measured yet
+      const sx = w / fmt.width;
+      const sy = h / fmt.height;
+      const next = Math.min(sx, sy);
+      if (next > 0) setScale(next);
+    }
+    fit();
+    // Catch the case where iframe was 0×0 at first paint
+    const raf = requestAnimationFrame(fit);
+    const t = setTimeout(fit, 100);
+    window.addEventListener("resize", fit);
+    const ro = new ResizeObserver(fit);
+    ro.observe(document.documentElement);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(t);
+      window.removeEventListener("resize", fit);
+      ro.disconnect();
+    };
+  }, [fmt.width, fmt.height]);
+
+  return (
+    <>
+      <div className="stage-wrap">
+        <div className="stage-scaler" style={{
+          width: fmt.width, height: fmt.height,
+          transform: `scale(${scale})`,
+        }}>
+          <window.WerkbankStage scene={scene} width={fmt.width} height={fmt.height} />
+        </div>
+      </div>
+
+      {!liveScene && <div className="hint">← →   spatie · home · end</div>}
+
+      {!liveScene && <div className="nav">
+        <button onClick={() => setIdx((i) => Math.max(0, i - 1))} title="Vorige (←)">◀</button>
+        <div className="dots">
+          {window.WB_SCENES.map((_, i) => (
+            <div
+              key={i}
+              className={"dot " + (i === idx ? "active" : i < idx ? "played" : "")}
+              onClick={() => setIdx(i)}
+              title={`Beat ${i + 1}`}
+            />
+          ))}
+        </div>
+        <span style={{ fontVariantNumeric: "tabular-nums", padding: "0 6px" }}>
+          {String(idx + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+        </span>
+        <button onClick={() => setIdx((i) => Math.min(total - 1, i + 1))} title="Volgende (→ / spatie)">▶</button>
+      </div>}
+
+      {!liveScene && <TweaksPanel title="Tweaks">
+        <TweakSection title="Demo">
+          <TweakSelect
+            label="Beat"
+            value={idx}
+            onChange={(v) => setIdx(parseInt(v))}
+            options={window.WB_SCENES.map((s, i) => ({
+              value: i,
+              label: `${String(i + 1).padStart(2, "0")} · ${s.id}`,
+            }))}
+          />
+          <TweakToggle
+            label="Autoplay"
+            value={!!tweaks.autoplay}
+            onChange={(v) => setTweak("autoplay", v)}
+          />
+          <TweakSlider
+            label="Autoplay-snelheid (sec)"
+            min={2} max={10} step={0.5}
+            value={tweaks.autoplayMs / 1000}
+            onChange={(v) => setTweak("autoplayMs", v * 1000)}
+          />
+        </TweakSection>
+
+        <TweakSection title="Formaat">
+          <TweakRadio
+            label="Voor"
+            value={tweaks.format}
+            onChange={(v) => setTweak("format", v)}
+            options={[
+              { value: "podium", label: "Podium" },
+              { value: "tv",     label: "TV" },
+              { value: "vertical", label: "Vertical" },
+            ]}
+          />
+        </TweakSection>
+
+        <TweakSection title="Snelnav">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+            <TweakButton onClick={() => setIdx(0)}>Intro</TweakButton>
+            <TweakButton onClick={() => setIdx(5)}>De bocht (beat 6)</TweakButton>
+          </div>
+        </TweakSection>
+      </TweaksPanel>}
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

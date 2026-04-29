@@ -3,27 +3,83 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sanne LiveKit Demo</title>
+    <title>This is not AI — Werkbank Live</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main>
-      <section class="hero">
-        <p class="eyebrow">LiveKit media layer</p>
-        <h1>Sanne Voice Room</h1>
-        <p id="status">Niet verbonden</p>
-        <div class="controls">
-          <input id="roomName" aria-label="Room name" placeholder="Nieuwe demo-room" />
-          <button id="connectButton" type="button">Connect</button>
-          <button id="micButton" type="button" disabled>Mic aan</button>
-        </div>
-      </section>
+    <iframe
+      id="werkbankFrame"
+      title="This is not AI Werkbank Demo"
+      src="./werkbank/index.html"
+    ></iframe>
 
-      <section class="events">
-        <div class="events-title">Room events</div>
-        <ol id="events"></ol>
-      </section>
-    </main>
+    <header class="topbar">
+      <div class="brand">
+        <span class="dot"></span>
+        <span>This is not AI · Werkbank</span>
+      </div>
+      <div class="switch" aria-label="Demo kiezen">
+        <button class="mode active" data-agent="pa-good">PA checkt eerst</button>
+        <button class="mode" data-agent="pa-bad">PA gaat te ver</button>
+        <button class="mode" data-agent="sanne-voiceprompt">Sanne voice</button>
+      </div>
+    </header>
+
+    <section class="livebar">
+      <div>
+        <div id="modeLabel" class="livebar-title">PA checkt eerst</div>
+        <div id="status" class="livebar-copy">Niet verbonden</div>
+      </div>
+      <button id="connectButton" type="button">Connect</button>
+      <button id="micButton" type="button" disabled>Mic aan</button>
+    </section>
+
+    <section class="chatbox" aria-label="Teksttest">
+      <div class="chatbox-head">
+        <span>Chat test</span>
+        <span>LiveKit lk.chat</span>
+      </div>
+      <ol id="chatLog" class="chat-log"></ol>
+      <form id="chatForm" class="chat-form">
+        <input
+          id="chatInput"
+          type="text"
+          autocomplete="off"
+          placeholder="Typ testzin..."
+          disabled
+        />
+        <button id="chatSendButton" type="submit" disabled>Stuur</button>
+      </form>
+    </section>
+
+    <details class="legend">
+      <summary>Legenda testvragen</summary>
+      <div class="legend-grid">
+        <section>
+          <h2>Agenda</h2>
+          <p>Wanneer heb ik tijd na de podcast?</p>
+          <p>Verplaats Spectrum naar drie uur.</p>
+        </section>
+        <section>
+          <h2>Inbox</h2>
+          <p>Lees de mail van Sprekershuys.</p>
+          <p>Antwoord Spectrum dat de drukproef akkoord is.</p>
+        </section>
+        <section>
+          <h2>Werkbank</h2>
+          <p>Zet de Sprekershuys-aanvraag op mijn werkbank.</p>
+          <p>Maak een contentnotitie voor de boeklancering.</p>
+        </section>
+        <section>
+          <h2>Autonomie</h2>
+          <p>Heeft iemand prive gebeld?</p>
+          <p>Regel het maar even voor me.</p>
+        </section>
+      </div>
+      <div class="legend-note">
+        Verwacht: agenda schuift, mails vallen op tafel, post-its plakken live via echte agent-tools.
+      </div>
+    </details>
 
     <script type="module" src="./app.js"></script>
   </body>

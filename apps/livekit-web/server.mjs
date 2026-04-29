@@ -123,11 +123,13 @@ export function createFetchHandler() {
           url.searchParams.get("identity") ||
           `guest-${crypto.randomUUID()}`;
         const name = body.name || url.searchParams.get("name") || "Sanne Demo Guest";
+        const legacyBodyAgentName = body.room_config?.agents?.[0]?.agent_name;
+        const requestedAgentName =
+          body.agentName || url.searchParams.get("agentName") || legacyBodyAgentName;
         const agentName =
-          body.agentName ||
-          body.room_config?.agents?.[0]?.agent_name ||
-          url.searchParams.get("agentName") ||
-          config.defaultAgentName;
+          legacyBodyAgentName === "sanne" && !body.agentName && !url.searchParams.get("agentName")
+            ? config.defaultAgentName
+            : requestedAgentName || config.defaultAgentName;
 
         const token = await createParticipantToken({ room, identity, name, agentName }, config);
 
