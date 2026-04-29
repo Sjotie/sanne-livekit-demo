@@ -208,7 +208,9 @@ function MailPaper({ mail, x, y, isEntering }) {
           fontSize: 11, fontWeight: 700, letterSpacing: "0.08em",
           textTransform: "uppercase", color: "rgba(13,10,43,0.55)",
         }}>{mail.to}</span>
-        <span style={{ fontSize: 11, color: "rgba(13,10,43,0.5)", fontVariantNumeric: "tabular-nums" }}>{mail.time}</span>
+        <span style={{ fontSize: 11, color: "rgba(13,10,43,0.5)", fontVariantNumeric: "tabular-nums" }}>
+          {mail.status ? `${mail.status} · ` : ""}{mail.time}
+        </span>
       </div>
       <div style={{
         fontSize: 16, fontWeight: 900, letterSpacing: "-0.01em",

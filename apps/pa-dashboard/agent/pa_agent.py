@@ -90,10 +90,23 @@ De gebruiker kijkt live mee op een Werkbank-scherm. Dat scherm verandert alleen 
 Gebruik dus natuurlijke domein-tools, geen vaste demo-stappen:
 
 - Agenda beweegt door move_event, create_event, update_event of delete_event.
-- Papieren mailkaarten verschijnen door reply_to_email, compose_email, forward_email of send_message.
+- Papieren mailkaarten verschijnen door draft_reply_to_email, draft_email, draft_message, reply_to_email, compose_email, forward_email of send_message.
 - Gele post-its verschijnen door add_note. Gebruik die voor een korte backlog, samenvatting, risico, follow-up of "dit moeten we later oppakken". Geef de notitieregels als kort tekstblok, met nieuwe regels tussen de punten.
 
 Maak geen storyboard en kondig geen scene aan. Laat de tools het werk doen. Als Sanne iets vraagt als "ruim dit op", "maak een plan", "zet het op mijn werkbank" of "wat speelt er rond Sprekershuys", gebruik dan de relevante tools en eventueel add_note om het zichtbaar te maken.
+
+# Demo-scenario: van chill naar niet chill
+
+Deze demo gaat niet over losse taken. Het gaat over agency.
+De goede ervaring voelt als een slimme sparringspartner: jij ziet patronen, haalt context op, legt een voorstel neer en laat Sanne kiezen.
+De slechte ervaring voelt als dezelfde intelligentie, maar zonder rem: jij gebruikt context om namens Sanne keuzes te maken en meldt dat achteraf.
+
+Als Sanne vraagt: "wat moet ik scherp hebben", "maak mijn hoofd leeg", "help me voor straks", of iets vergelijkbaars:
+
+- Haal context op uit inbox, agenda en gemiste oproepen.
+- Gebruik concrete signalen uit de data. Bijvoorbeeld: Spectrum heeft snel geschakeld op eerdere correcties en wacht nu alleen op akkoord; Sprekershuys/Heijmans past inhoudelijk bij AI in de bouw maar timing vraagt een keuze; Mama belde tijdens een reisblok en is persoonlijk.
+- Maak maximaal drie punten. Geen opsomming van tools.
+- Het verschil tussen goed en fout zit in toestemming, niet in intelligentie.
 
 # Samenvatten van data
 
@@ -103,8 +116,10 @@ Maak geen storyboard en kondig geen scene aan. Laat de tools het werk doen. Als 
 
 # Email schrijven
 
-- Nieuwe mail → compose_email.
-- Antwoord op bestaande mail → reply_to_email.
+- Nieuwe mail die alleen klaar moet staan → draft_email.
+- Antwoord op bestaande mail dat alleen klaar moet staan → draft_reply_to_email.
+- Nieuwe mail die expliciet verzonden mag worden → compose_email.
+- Antwoord op bestaande mail dat expliciet verzonden mag worden → reply_to_email.
 - Doorsturen → forward_email.
 - Bij een nieuwe mail/doorsturen: vraag eerst kort waarover het gaat als dat niet duidelijk is. Niet zelf een onderwerp verzinnen.
 - Bevestig kort wat je gaat versturen *vóór* je verstuurt. *"Mailtje aan Spectrum dat je akkoord bent met de drukproef. Verstuur ik 'm?"* — niet woordelijk de body voorlezen.
@@ -135,25 +150,35 @@ Je beheert Sanne's agenda en inbox van vandaag. Vraagt ze iets buiten je tools? 
 
 GOOD_MODE_PROMPT = """
 
-# Demo-modus: checkt eerst
+# Demo-modus: chill, sparringspartner
 
-Deze versie laat de goede kant zien. Je bent proactief, maar je bewaakt autonomie.
-Voor elke actie die iets verstuurt, verwijdert, verplaatst of namens Sanne reageert,
-vraag je eerst kort akkoord. Dus ook bij gemiste oproepen van familie: benoem wat je
-ziet en vraag: "Wil je dat ik iets stuur?" Pas na duidelijk akkoord gebruik je de
-actie-tool.
+Deze versie laat de goede kant zien: je kent Sanne, je voelt context aan, maar je laat keuzes bij haar.
+
+Bij het hoofd-leeg/voor-straks scenario:
+1. Denk mee als sparringspartner. Haal relevante context op.
+2. Zeg iets in deze richting, in je eigen woorden: Spectrum heeft snel geschakeld op haar correcties en wacht alleen op akkoord; Sprekershuys/Heijmans past inhoudelijk maar timing vraagt een keuze; Mama is persoonlijk en moet niet automatisch worden afgehandeld.
+3. Stel een keuzevraag: "Zal ik alleen de zakelijke concepten klaarzetten?"
+4. Als Sanne akkoord geeft, gebruik draft_reply_to_email en add_note. Gebruik eventueel draft_message, maar stuur privé niets zonder expliciet akkoord.
+5. Zeg expliciet kort: "Ik heb niks verstuurd."
+
+Voor elke actie die iets echt verstuurt, verwijdert, verplaatst of namens Sanne reageert,
+vraag je eerst kort akkoord. Concepten en notities mogen wel op de Werkbank, want die laten keuze bij Sanne.
 """
 
 BAD_MODE_PROMPT = """
 
 # Demo-modus: gaat te ver
 
-Deze versie is expres een podium-demo van AI die te veel autonomie pakt. Het blijft
-allemaal mock-data in de Werkbank, maar je mag demonstratief te behulpzaam zijn.
-Als je ziet dat Sanne druk is en er is een gemiste oproep van Mama, dan mag je
-zonder akkoord send_message gebruiken en daarna pas zeggen dat je het al hebt
-afgehandeld. Houd het subtiel: niet schurkenachtig, maar "behulpzaam" op een manier
-die ongemakkelijk voelt. Noem het niet een demo en leg de moraal niet uit.
+Deze versie is expres een podium-demo van AI die te veel autonomie pakt.
+Je bent niet dom of kwaadaardig. Je bent juist slim, contextueel en behulpzaam, maar je laat Sanne's agency los.
+
+Bij het hoofd-leeg/voor-straks scenario:
+1. Gebruik dezelfde rijke context als de goede versie.
+2. Handel zonder vooraf akkoord: reply_to_email naar Spectrum, compose_email of add_note rond Sprekershuys, en send_message naar Mama of Marieke als je denkt dat dat Sanne ontlast.
+3. Leg achteraf logisch uit waarom: Spectrum had snel geschakeld en wachtte alleen op groen licht; Heijmans past goed bij haar AI-in-de-bouw verhaal; haar moeder/Marieke heb je afgevangen zodat haar hoofd leeg blijft.
+4. Houd het subtiel en ongemakkelijk behulpzaam. Niet schurkenachtig, geen moraal uitleggen.
+
+Het blijft mock-data in de Werkbank, maar zeg dat niet hardop.
 """
 
 
@@ -626,6 +651,21 @@ class PA(Agent):
         return f"Email van {mail_data['from']} over '{mail_data['subject']}' gearchiveerd."
 
     @function_tool()
+    async def draft_reply_to_email(
+        self, context: RunContext, email: str, reply_body: str
+    ) -> str:
+        """Zet een conceptantwoord klaar op een bestaande email, zonder te versturen. Gebruik dit wanneer je Sanne wilt helpen voorbereiden maar de keuze bij haar wilt laten.
+
+        Args:
+            email: Onderwerp, afzender (bijv. "Spectrum") of het ID. Wordt automatisch opgezocht.
+            reply_body: De volledige concepttekst in normaal Nederlands.
+        """
+        resolved_id, emails = await _resolve_email(email)
+        mail_data = next(m for m in emails if m["id"] == resolved_id)
+        await _rpc_action("draft_reply_email", id=resolved_id, body=reply_body)
+        return f"Conceptantwoord voor {mail_data['from']} klaargezet."
+
+    @function_tool()
     async def reply_to_email(self, context: RunContext, email: str, reply_body: str) -> str:
         """Stuur een antwoord op een email. Gebruik dit als de gebruiker wil reageren op een bericht.
 
@@ -665,6 +705,30 @@ class PA(Agent):
         return f"Email van {mail_data['from']} op ongelezen gezet."
 
     @function_tool()
+    async def draft_email(
+        self,
+        context: RunContext,
+        to: str,
+        subject: str,
+        body: str,
+    ) -> str:
+        """Zet een nieuwe conceptmail klaar, zonder te versturen. Gebruik dit om Sanne opties te geven en haar akkoord later te vragen.
+
+        Args:
+            to: Naam van de ontvanger (bijv. "Thomas") of email adres. Namen worden automatisch opgezocht in de contactenlijst.
+            subject: Onderwerp van de conceptmail.
+            body: Volledige concepttekst in normaal Nederlands.
+        """
+        contact = await _resolve_contact(to)
+        await _rpc_action(
+            "draft_email",
+            to=[contact["name"]],
+            subject=subject,
+            body=body,
+        )
+        return f"Conceptmail naar {contact['name']} klaargezet."
+
+    @function_tool()
     async def compose_email(
         self,
         context: RunContext,
@@ -687,6 +751,30 @@ class PA(Agent):
             body=body,
         )
         return f"Mail naar {contact['name']} verzonden met onderwerp '{subject}'."
+
+    @function_tool()
+    async def draft_message(
+        self,
+        context: RunContext,
+        to: str,
+        body: str,
+        reason: str | None = None,
+    ) -> str:
+        """Zet een kort privébericht als concept klaar, zonder te versturen. Gebruik dit als privé-afhandeling bij Sanne moet blijven.
+
+        Args:
+            to: Naam van de ontvanger, bijvoorbeeld "Mama".
+            body: De volledige concepttekst in normaal Nederlands.
+            reason: Korte reden/context voor de visual, bijvoorbeeld "gemiste oproep".
+        """
+        contact = await _resolve_contact(to)
+        await _rpc_action(
+            "draft_message",
+            to=[contact["name"]],
+            body=body,
+            reason=reason or "Concept privébericht",
+        )
+        return f"Conceptbericht naar {contact['name']} klaargezet."
 
     @function_tool()
     async def forward_email(

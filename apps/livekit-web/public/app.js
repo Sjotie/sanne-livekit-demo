@@ -55,10 +55,10 @@ let events = [
 }));
 
 let emails = [
-  makeEmail("mail-spectrum", "Marit Spectrum", "MS", "Drukproef This is not AI - laatste check", "Kun jij nog een keer akkoord geven op de drukproef?", "De laatste correcties zijn doorgevoerd. Kun jij akkoord geven?"),
-  makeEmail("mail-sprekershuys", "Lotte Sprekershuys", "LS", "Aanvraag keynote - Heijmans 12 juni", "Nieuwe aanvraag voor 12 juni.", "Nieuwe aanvraag van Heijmans voor een keynote over AI in de bouw."),
+  makeEmail("mail-spectrum", "Marit Spectrum", "MS", "Drukproef This is not AI - laatste check", "Kun jij nog een keer akkoord geven op de drukproef?", "We hebben vannacht je laatste correcties verwerkt. Als jij akkoord geeft, kan het bestand door naar de drukker. Dank voor het snelle schakelen gisteren."),
+  makeEmail("mail-sprekershuys", "Lotte Sprekershuys", "LS", "Aanvraag keynote - Heijmans 12 juni", "Nieuwe aanvraag voor 12 juni.", "Heijmans vraagt een keynote over AI in de bouw. Inhoudelijk past dit goed bij je verhaal over AI in praktische teams, maar die week staat al vrij vol. Kun jij aangeven of we positief mogen terugkoppelen?"),
   makeEmail("mail-asml", "Dick Arts", "DA", "Bevestiging keynote vandaag", "Alles staat klaar voor vandaag.", "Aankomst om elf uur, keynote om half twaalf."),
-  makeEmail("mail-mama-call", "Mama", "MA", "Gemiste oproep", "Je moeder probeerde je te bellen.", "Gemiste oproep van Mama om 14:12. Je agenda zit vol tot na de podcast."),
+  makeEmail("mail-mama-call", "Mama", "MA", "Gemiste oproep", "Je moeder probeerde je te bellen.", "Gemiste oproep van Mama om 14:12, precies tijdens je reisblok. Geen urgent bericht erbij, wel persoonlijk."),
   makeEmail("mail-marieke", "Marieke", "MA", "Lunchen volgende week?", "Zullen we volgende week even lunchen?", "Lieverd, zullen we volgende week even lunchen? Ben benieuwd hoe het met je boek gaat."),
   makeEmail("mail-pap", "Pap", "PA", "Zondag samen eten?", "Zondag eten bij ons?", "Hoi San, kom je zondag samen eten? Zou gezellig zijn."),
 ];
@@ -143,7 +143,7 @@ function buildWerkbankScene() {
   const activeMissedCalls = missedCalls.filter((call) => !call.handled);
   const actionNotes = visualNotes.slice(-4);
   const sentMails = emails
-    .filter((mail) => mail.folder === "sent")
+    .filter((mail) => mail.folder === "sent" || mail.folder === "draft")
     .slice(0, 5)
     .map((mail, index) => ({
       id: mail.id,
@@ -151,6 +151,7 @@ function buildWerkbankScene() {
       subject: mail.subject,
       body: mail.body,
       time: formatClock(mail.date),
+      status: mail.folder === "draft" ? "Concept" : "Verstuurd",
       rotate: [-2.4, 1.6, -0.8, 2.1, -1.4][index % 5],
     }));
 
@@ -508,9 +509,11 @@ function applyAction(action) {
       return events.find((event) => event.id === action.id);
     }
     case "reply_email":
+    case "draft_reply_email":
       {
         const source = emails.find((mail) => mail.id === action.id);
         const recipient = source?.from || "contact";
+        const isDraft = action.type === "draft_reply_email";
         const created = {
           id: `${mailVisualPrefix(recipient)}-${++nextMailId}`,
           from: user.name,
@@ -526,13 +529,15 @@ function applyAction(action) {
           archived: false,
           starred: false,
           replied: false,
-          folder: "sent",
+          folder: isDraft ? "draft" : "sent",
           composedByAgent: true,
         };
         emails = [
           created,
           ...emails.map((mail) =>
-            mail.id === action.id ? { ...mail, replied: true, read: true } : mail,
+            mail.id === action.id
+              ? { ...mail, replied: !isDraft || mail.replied, read: true }
+              : mail,
           ),
         ];
         return created;
@@ -546,8 +551,11 @@ function applyAction(action) {
       );
       return emails.find((mail) => mail.id === action.id);
     case "compose_email":
-    case "send_message": {
+    case "draft_email":
+    case "send_message":
+    case "draft_message": {
       const recipient = action.to?.[0] || "onbekend";
+      const isDraft = action.type === "draft_email" || action.type === "draft_message";
       const created = {
         id: `${mailVisualPrefix(recipient)}-${++nextMailId}`,
         from: user.name,
@@ -561,7 +569,7 @@ function applyAction(action) {
         archived: false,
         starred: false,
         replied: false,
-        folder: "sent",
+        folder: isDraft ? "draft" : "sent",
         composedByAgent: true,
       };
       emails = [created, ...emails];
@@ -672,12 +680,18 @@ function actionCaption(action) {
       return `Agenda bijgewerkt: ${action.title || "details aangepast"}`;
     case "reply_email":
       return "Antwoord geschreven en verstuurd.";
+    case "draft_reply_email":
+      return "Antwoord staat klaar als concept.";
     case "compose_email":
       return `Mail naar ${action.to?.[0] || "contact"} staat op de werkbank.`;
+    case "draft_email":
+      return `Conceptmail naar ${action.to?.[0] || "contact"} staat klaar.`;
     case "forward_email":
       return `Mail doorgestuurd naar ${action.to?.[0] || "contact"}.`;
     case "send_message":
       return `Ik heb ${action.to?.[0] || "haar"} alvast een bericht gestuurd.`;
+    case "draft_message":
+      return `Conceptbericht aan ${action.to?.[0] || "haar"} staat klaar.`;
     case "add_note":
       return `Notitie op de werkbank: ${action.title || "notitie"}.`;
     case "archive_email":

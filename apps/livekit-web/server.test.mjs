@@ -53,9 +53,24 @@ describe("Werkbank test legend", () => {
     const html = readFileSync(new URL("./public/index.html", import.meta.url), "utf8");
 
     expect(html).toContain("Legenda testvragen");
-    expect(html).toContain("Zet de Sprekershuys-aanvraag op mijn werkbank.");
-    expect(html).toContain("echte agent-tools");
+    expect(html).toContain("Shortcut, help me even scherp krijgen wat ik nu wel en niet moet doen.");
+    expect(html).toContain("Good: context, advies, concepten.");
     expect(html).not.toContain("data-action");
+  });
+});
+
+describe("Werkbank draft visuals", () => {
+  test("renders draft cards separately from sent mail cards", () => {
+    const app = readFileSync(new URL("./public/app.js", import.meta.url), "utf8");
+    const stage = readFileSync(
+      new URL("./public/werkbank/werkbank-stage.jsx", import.meta.url),
+      "utf8",
+    );
+
+    expect(app).toContain('mail.folder === "sent" || mail.folder === "draft"');
+    expect(app).toContain('case "draft_reply_email"');
+    expect(app).toContain('case "draft_message"');
+    expect(stage).toContain("{mail.status ? `${mail.status} · ` : \"\"}{mail.time}");
   });
 });
 
