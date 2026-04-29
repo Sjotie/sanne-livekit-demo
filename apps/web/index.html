@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sanne Voice Agent Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="stage">
+        <p class="eyebrow">This is not AI</p>
+        <h1>Sanne Voice Agent</h1>
+        <p class="status" id="status">Niet verbonden</p>
+
+        <div class="controls">
+          <input id="wsUrl" aria-label="WebSocket URL" value="ws://127.0.0.1:8787/ws" />
+          <button id="connectButton" type="button">Connect</button>
+          <button id="talkButton" type="button" disabled>Hold to talk</button>
+        </div>
+      </section>
+
+      <section class="log" aria-label="Event log">
+        <div class="log-header">
+          <span>Events</span>
+          <button id="clearButton" type="button">Clear</button>
+        </div>
+        <ol id="events"></ol>
+      </section>
+    </main>
+
+    <script src="./src/app.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,242 @@
+[
+  {
+    "model": "openai/gpt-oss-120b",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 8.922,
+    "total_s": 8.922,
+    "chars": 9,
+    "preview": "Begin met",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "openai/gpt-oss-120b",
+    "run": 2,
+    "status": 200,
+    "ttft_s": null,
+    "total_s": 0.853,
+    "chars": 0,
+    "preview": "",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "openai/gpt-oss-120b",
+    "run": 3,
+    "status": 200,
+    "ttft_s": 0.61,
+    "total_s": 0.614,
+    "chars": 9,
+    "preview": "Begin met",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "deepseek-ai/DeepSeek-V3.1",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 0.728,
+    "total_s": 0.967,
+    "chars": 180,
+    "preview": "Begin met het identificeren van repetitieve taken die geautomatiseerd kunnen worden. Investeer vervolgens tijd in het leren van de juiste prompts om de beste resultaten te krijgen.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "deepseek-ai/DeepSeek-V3.1",
+    "run": 2,
+    "status": 200,
+    "ttft_s": 0.786,
+    "total_s": 0.872,
+    "chars": 177,
+    "preview": "Begin met het identificeren van repetitieve taken die je kunt automatiseren. Blijf daarnaast kritisch op de output en ontwikkel je eigen expertise om AI-resultaten te valideren.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "deepseek-ai/DeepSeek-V3.1",
+    "run": 3,
+    "status": 200,
+    "ttft_s": 0.615,
+    "total_s": 0.872,
+    "chars": 177,
+    "preview": "Begin met het identificeren van repetitieve taken die je kunt automatiseren. Blijf daarnaast kritisch op de output en ontwikkel je eigen expertise om AI-resultaten te valideren.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "zai-org/GLM-4.7",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 0.888,
+    "total_s": 0.924,
+    "chars": 102,
+    "preview": "Begin klein met tools die jouw taken direct versnellen. Blijf kritisch en controleer altijd de output.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "zai-org/GLM-4.7",
+    "run": 2,
+    "status": 200,
+    "ttft_s": 0.645,
+    "total_s": 0.828,
+    "chars": 121,
+    "preview": "Kies een tool die past bij je dagelijkse taken en begin met kleine experimenten. Focus op resultaat en leer door te doen.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "zai-org/GLM-4.7",
+    "run": 3,
+    "status": 200,
+    "ttft_s": 0.697,
+    "total_s": 0.858,
+    "chars": 121,
+    "preview": "Kies een tool die past bij je dagelijkse taken en begin met kleine experimenten. Focus op resultaat en leer door te doen.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "moonshotai/Kimi-K2.5",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 1.107,
+    "total_s": 1.37,
+    "chars": 128,
+    "preview": "Begin met één klein, concreet probleem dat je nu hebt. Test een tool zoals ChatGPT of Copilot en leer van wat wel en niet werkt.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "moonshotai/Kimi-K2.5",
+    "run": 2,
+    "status": 200,
+    "ttft_s": 1.233,
+    "total_s": 1.67,
+    "chars": 127,
+    "preview": "Begin met één specifiek, saai taakje dat je vaak doet. Test een tool zoals ChatGPT een week, en kijk of het echt tijd bespaart.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "moonshotai/Kimi-K2.5",
+    "run": 3,
+    "status": 200,
+    "ttft_s": 0.592,
+    "total_s": 1.339,
+    "chars": 142,
+    "preview": "Begin met één concreet, terugkerend klusje dat je nu zelf doet. Test een paar tools en kies degene die jouw taal begrijpt zonder rare fratsen.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "MiniMaxAI/MiniMax-M2.5",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 1.334,
+    "total_s": 1.713,
+    "chars": 171,
+    "preview": "  Begin met een concrete probleem of taak waar AI direct waarde kan toevoegen, en experimenteer daarna met verschillende tools om te ontdekken wat het beste werkt voor jou",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "MiniMaxAI/MiniMax-M2.5",
+    "run": 2,
+    "status": 200,
+    "ttft_s": 0.862,
+    "total_s": 1.356,
+    "chars": 154,
+    "preview": "  Begin met een concrete probleem of taak die je regelmatig uitvoert en ontdek welke AI-tool daar bij past. Experimenteer eerst met onbelangrijke taken om",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "MiniMaxAI/MiniMax-M2.5",
+    "run": 3,
+    "status": 200,
+    "ttft_s": 0.88,
+    "total_s": 1.362,
+    "chars": 165,
+    "preview": "  Begin met een concrete probleem of taak waar je dagelijks tijd aan verliest, en ontdek daarna welke AI-tools daarvoor geschikt zijn. Experimenteer met kleine taken",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "zai-org/GLM-5",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 25.735,
+    "total_s": 26.992,
+    "chars": 137,
+    "preview": "Begin klein met een taak die veel tijd kost, zoals het schrijven van e-mails. Experimenteer gerust, maar controleer altijd het resultaat.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "zai-org/GLM-5",
+    "run": 2,
+    "status": 200,
+    "ttft_s": 39.094,
+    "total_s": 41.167,
+    "chars": 172,
+    "preview": "Begin met een kleine taak die veel tijd kost en automatiseer die met een tool als ChatGPT. Zo leer je snel de mogelijkheden kennen zonder dat je meteen alles moet omgooien.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "zai-org/GLM-5",
+    "run": 3,
+    "status": null,
+    "ttft_s": null,
+    "total_s": 13.386,
+    "chars": 0,
+    "preview": "",
+    "error": "RemoteProtocolError('Server disconnected without sending a response.')"
+  },
+  {
+    "model": "nvidia/Nemotron-120B-A12B",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 5.236,
+    "total_s": 5.605,
+    "chars": 257,
+    "preview": "Begin met een duidelijk gedefinieerd probleem dat AI kan oplossen, zoals het automatiseren van herhalende taken of het analyseren van grote datasets. Kies een eenvoudig, betrouwbaa",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "nvidia/Nemotron-120B-A12B",
+    "run": 2,
+    "status": 200,
+    "ttft_s": 0.632,
+    "total_s": 0.773,
+    "chars": 185,
+    "preview": "Begin met een duidelijk doel: wat wil je dat de AI voor je doet? Kies dan een eenvoudig hulpmiddel en test het stap voor stap — verbetering komt door doen, niet door perfect te wac",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "nvidia/Nemotron-120B-A12B",
+    "run": 3,
+    "status": 200,
+    "ttft_s": 0.669,
+    "total_s": 0.94,
+    "chars": 235,
+    "preview": "Begin met een duidelijk doel: identificeer een specifiek, herhaalbaar werkproces dat je wilt verbeteren met AI.   Test eerst eenvoudige tools (zoals AI-geassisteerd schrijven of da",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "moonshotai/Kimi-K2.6",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 0.962,
+    "total_s": 1.405,
+    "chars": 170,
+    "preview": "Begin met één specifiek taakje dat je nu vaak herhaalt, zoals samenvatten of mailen. Test het een week en kijk of het tijd bespaart zonder dat de kwaliteit eronder lijdt.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "moonshotai/Kimi-K2.6",
+    "run": 2,
+    "status": 200,
+    "ttft_s": 0.541,
+    "total_s": 0.843,
+    "chars": 110,
+    "preview": "Begin met één simpel, herhalend taakje dat je nu al doet. Test het een week en kijk of het echt tijd bespaart.",
+    "error": "IndexError('list index out of range')"
+  },
+  {
+    "model": "moonshotai/Kimi-K2.6",
+    "run": 3,
+    "status": 200,
+    "ttft_s": 1.187,
+    "total_s": 1.687,
+    "chars": 142,
+    "preview": "Begin met een klein, concreet probleem dat je nu vaak herhaalt. Test een tool zoals ChatGPT of Copilot, en evalueer of het echt tijd bespaart.",
+    "error": "IndexError('list index out of range')"
+  }
+]

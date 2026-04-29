@@ -1,0 +1,48 @@
+model_name: sanne-livekit-agent
+description: Baseten-hosted LiveKit voice agent worker for the Sanne demo.
+
+model_module_dir: model
+model_class_name: Model
+
+requirements:
+  - fastapi>=0.115.0
+  - httpx>=0.28.0
+  - uvicorn[standard]>=0.30.0
+  - livekit-agents[google,mistralai,openai,silero,turn-detector]~=1.5
+  - livekit-plugins-noise-cancellation>=0.2.0
+  - numpy>=2.0.0
+  - python-dotenv>=1.0.0
+
+resources:
+  cpu: "4"
+  memory: 8Gi
+  accelerator: null
+
+environment_variables:
+  SANNE_AGENT_NAME: sanne-voiceprompt
+  SANNE_LLM_PROVIDER: baseten
+  BASETEN_OPENAI_BASE_URL: https://inference.baseten.co/v1
+  BASETEN_LLM_MODEL: moonshotai/Kimi-K2.6
+  SANNE_STT_PROVIDER: mistral
+  MISTRAL_STT_MODEL: voxtral-mini-latest
+  SANNE_TTS_PROVIDER: mistral
+  BASETEN_OMNIVOICE_MODEL_ID: wl1mx6vq
+  BASETEN_OMNIVOICE_VOICE: clone:sanne
+  BASETEN_OMNIVOICE_NUM_STEP: "16"
+  MISTRAL_TTS_VOICE: dddbcfec-4e84-4655-bd8f-4194da2a85af
+  SANNE_TTS_PREROLL_MS: "0"
+  SANNE_TTS_MIN_PHRASE_CHARS: "72"
+  SANNE_TTS_STREAM_CONTEXT_CHARS: "18"
+  SANNE_AUDIO_OUTPUT_QUEUE_MS: "1000"
+  SANNE_TTS_LOG_TIMING: "true"
+  SANNE_ENDPOINT_MIN_DELAY: "0.15"
+  SANNE_ENDPOINT_MAX_DELAY: "0.8"
+  SANNE_STT_LANGUAGE: nl
+  SANNE_TURN_DETECTOR: "false"
+
+secrets:
+  baseten_api_key: null
+  livekit_url: null
+  livekit_api_key: null
+  livekit_api_secret: null
+  mistral_api_key: null

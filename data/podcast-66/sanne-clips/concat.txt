@@ -1,0 +1,4 @@
+file '/Users/sjoerdtiemensma/Projects/sanne-demo/data/podcast-66/sanne-clips/001.mp3'
+file '/Users/sjoerdtiemensma/Projects/sanne-demo/data/podcast-66/sanne-clips/002.mp3'
+file '/Users/sjoerdtiemensma/Projects/sanne-demo/data/podcast-66/sanne-clips/003.mp3'
+file '/Users/sjoerdtiemensma/Projects/sanne-demo/data/podcast-66/sanne-clips/004.mp3'

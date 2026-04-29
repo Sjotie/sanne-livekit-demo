@@ -1,0 +1,144 @@
+:root {
+  color-scheme: light;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f5f2eb;
+  color: #181818;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 460px);
+  min-height: 100vh;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+  padding: 56px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #7b2d26;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+h1 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(48px, 8vw, 112px);
+  line-height: 0.92;
+  letter-spacing: 0;
+}
+
+.status {
+  min-height: 32px;
+  margin: 0;
+  font-size: 22px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto auto;
+  gap: 10px;
+  max-width: 820px;
+}
+
+input {
+  min-width: 0;
+  border: 1px solid #c9c0b3;
+  border-radius: 6px;
+  padding: 12px 14px;
+  background: #fffaf2;
+}
+
+button {
+  border: 0;
+  border-radius: 6px;
+  padding: 12px 16px;
+  background: #181818;
+  color: #fffaf2;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.log {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  border-left: 1px solid #ded4c6;
+  background: #fffaf2;
+}
+
+.log-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #ded4c6;
+  padding: 16px;
+  font-weight: 700;
+}
+
+.log-header button {
+  padding: 8px 10px;
+  background: #ece3d4;
+  color: #181818;
+}
+
+ol {
+  overflow: auto;
+  margin: 0;
+  padding: 16px 16px 24px 36px;
+}
+
+li {
+  margin-bottom: 10px;
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+@media (max-width: 860px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .stage {
+    padding: 32px 20px;
+  }
+
+  .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .log {
+    min-height: 42vh;
+    border-left: 0;
+    border-top: 1px solid #ded4c6;
+  }
+}

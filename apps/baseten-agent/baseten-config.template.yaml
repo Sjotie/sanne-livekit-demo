@@ -1,0 +1,24 @@
+# Template only. Fill image/model IDs after the Baseten workspace is ready.
+# Based on Baseten custom Docker server + WebSocket deployment docs.
+base_image:
+  image: your-registry/sanne-baseten-agent:latest
+
+docker_server:
+  start_command: uvicorn server:app --host 0.0.0.0 --port 8000
+  server_port: 8000
+  readiness_endpoint: /health
+  liveness_endpoint: /health
+  predict_endpoint: /health
+
+runtime:
+  transport:
+    kind: websocket
+
+resources:
+  accelerator: null
+
+environment_variables:
+  SANNE_AGENT_LLM_PROVIDER: baseten
+  SANNE_AGENT_STT_PROVIDER: baseten
+  SANNE_AGENT_TTS_PROVIDER: omnivoice
+  SANNE_AGENT_VOICE_ID: voice_Sanne_20260413101430

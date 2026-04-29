@@ -1,0 +1,26 @@
+# Older notes/template. Use config.yaml for the actual Truss deployment.
+# This file remains as a reference for the custom Docker server shape.
+
+base_image:
+  image: your-registry/sanne-baseten-livekit-agent:latest
+
+docker_server:
+  start_command: ./start.sh
+  server_port: 8000
+  readiness_endpoint: /health
+  liveness_endpoint: /health
+  predict_endpoint: /health
+
+resources:
+  # Start CPU-only for the worker shell if STT/TTS/LLM are external Baseten endpoints.
+  # Switch to a GPU only when OmniVoice or local models run inside this container.
+  accelerator: null
+
+environment_variables:
+  SANNE_AGENT_NAME: sanne
+  SANNE_LLM_PROVIDER: baseten
+  BASETEN_OPENAI_BASE_URL: https://inference.baseten.co/v1
+  SANNE_STT_PROVIDER: mistral
+  SANNE_TTS_PROVIDER: mistral
+  SANNE_ENDPOINT_MIN_DELAY: "0.15"
+  SANNE_ENDPOINT_MAX_DELAY: "0.8"

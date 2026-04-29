@@ -1,0 +1,721 @@
+{
+  "id": "66",
+  "title": "Me, Myself & AI - Sanne Cornelissen (Deel 1)",
+  "transcript": [
+    {
+      "speaker": "Guido van Winden",
+      "time": "00:01",
+      "text": "Welkom bij de podcast AI Je Nieuwe Collega, waarin AI-strateeg Wouter van Haaften, journalist Milou Brand en ik, Guido van Winden, op zoek gaan naar hoe AI ons leven productiever, makkelijker of leuker maakt. En in iedere aflevering behandelen wij één probleem, groot of klein, dat we oplossen met de hulp van AI."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "00:23",
+      "text": "En kleine disclaimer voordat we van start gaan. Wij hebben het grote geluk dat er flink gedrild wordt hier in de straat. Je hoort het. Er wordt een glasvezel gelegd. Als je het hoort, ligt het niet aan je microfoon of aan je eigen apparaat. Het is nou helemaal hier het geval. En we kunnen dit niet uitstellen, want het is een speciale dag."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "00:44",
+      "text": "Want we hebben een gast."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "00:45",
+      "text": "Exact. En vandaag bij ons de gast is Sanne Cornelissen. Sanne is gedragspsycholoog en AI-expert. Ze koppelt psychologische inzichten aan praktische toepassingen in het dagelijkse werkleven. Ze schreef het boek Me, Myself AI."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "01:00",
+      "text": "Geweldige titel."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "01:01",
+      "text": "Waarin ze je in drie stappen slimmer en leuker laat werken met AI. Sanne, welkom!"
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "01:08",
+      "text": "Nou, dankjewel."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "01:09",
+      "text": "We stijgen op ondertussen. Het is een beetje een helikopter. Het lijkt een beetje op een wasmachine."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "01:14",
+      "text": "Ja, op mijn wasmachine eigenlijk. Gewoon op drie hoog. En die verdieping gaat helemaal mee als ik hem aan heb staan."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "01:19",
+      "text": "Dus jij bent dit wel gewend?"
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "01:20",
+      "text": "Ja, dit is mijn natuurlijk dierlijk gevoel. Dus ik zit helemaal erin nu."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "01:24",
+      "text": "Sanne, hoe is het met je? Want je hebt een hele drukke agenda. We hebben gelukkig nog een gaatje kunnen vinden. Hoe ziet jouw leven eruit op dit moment?"
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "01:33",
+      "text": "Het is eigenlijk wel heel erg chill. Ik moet zeggen, ik ga heel erg lekker op volle dagen. Ik heb namelijk hiervoor vier weken niks gedaan. Jawel, ik heb heel veel gedaan, maar ik heb geen afspraken gehad. Ik had vier weken, dus na kerst en dan de eerste vier weken, heb ik geschreven aan mijn nieuwe boek. En ik ben heel veel altijd bezig met wanneer ik het meest productief ben. Dat is altijd in de ochtend. Dus dan start ik en dan ga ik schrijven, et cetera. Ik mocht dat ook in Curaçao doen, dus ik heb heerlijk in de zon gezeten. Maar eigenlijk word ik veel blijer van nu gewoon van alles doen de hele dag door. Wel vanochtend weer lekker gewerkt, maar ik ben veel energieker. Dus ik ben helemaal blij om weer terug te zijn."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "02:09",
+      "text": "Met die afspraken na elkaar."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "02:11",
+      "text": "Ja, love it."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "02:12",
+      "text": "En je bent van huis uit of van studie uitgedacht, psycholoog. Daar heb je ook een aantal jaar gewerkt?"
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "02:17",
+      "text": "Ik heb psychobiologie eerst gestudeerd. Dat is alles over de hersenen. Daar kreeg ik ook les over AI. Dat ging over neural networks en machine learning en allemaal dat soort termen. Dat vond ik al super interessant. Maar daarna ben ik gaan werken als gedragspsycholoog. Dat ging over gedragsbeïnvloeding door middel van communicatie. Hoe zet je mensen in beweging? Tijdens die hele tijd ben ik altijd al de nerd geweest die graag overzichten maakte, automatiseren en allemaal dat soort dingen. Toen mijn eerste bedrijf gestart."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "02:47",
+      "text": "Before it was cool eigenlijk."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "02:50",
+      "text": "Ik vond het al best wel cool. Eigenlijk zei ik altijd dat ik dat deed zodat ik juist de leuke dingen kon blijven doen in mijn leven. Toen AI kwam werd het allemaal nog iets makkelijker en nog iets efficiënter. Vooral als je het combineert met ook wanneer je het meest productief kunt werken en wanneer je blij bent hoe je de avonden vrij kunt houden en de weekenden voor de leuke dingen."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "03:12",
+      "text": "Dus inderdaad de meeste mensen zouden zeggen jeetje ik word echt geleefd op zo'n dag. Ik moet van afspraak naar afspraak. Maar eigenlijk is de life hack misschien dus wel in dit geval dat je het zo voor jezelf organiseert met allemaal tools en ik weet niet wat jij allemaal in je leven precies hebt geïnstalleerd om dat vlotjes te laten verlopen. Dat je dat doet, want dan kun je tenminste dat allemaal ontspannend doen in plaats van wat ik heb. Dan zit ik al in mijn hoofd met de volgende afspraak en niet vergeten dit en dat."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "03:38",
+      "text": "Ja, ik heb het geluk dat ik mijn eigen agenda kan bijhouden. Daar krijg ik ook wel hulp bij, maar zij weten precies hoe ik mijn agenda wil hebben. Dus omdat ik in de ochtend het meest productief ben, wil ik dan eigenlijk nooit afspraken hebben. Dan krijg ik dubbel zoveel gedaan. En in de middag, ik heb het liefst online meetings achter elkaar, zodat ik niet in een flow of in je focus dan tussendoor weer een meetinkje heb. Dat blemmert mij heel erg. Eigenlijk blemmert iedereen altijd heel erg. Als je dat weet van jezelf dan is dat heel handig. Maar we hebben natuurlijk ook heel veel luisteraars die bij een bedrijf werken en dan heb je niet die vrijheid om dat zo in te delen. Al is het wel zo dat de meeste mensen in de ochtend productiever zijn. Workshops daarover gegeven."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "04:18",
+      "text": "Dat ging echt over efficiënt werken en ook het brein en een klein beetje AI. Ook wel automatiseren. En dan hadden we ook vaak gesprekken van al die meetings de hele dag door en allemaal verspreiden op de hele dag. Wanneer doe je dan je werk? Dat is toch het grootste probleem van mensen. Als we daar toch collectief slimmer over na zouden denken en AI zouden gebruiken om lekker te notileren zodat niet iedereen bij een meeting hoeft te zijn."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "04:40",
+      "text": "Ja, want dat is toch gewoon een no-brainer. Dat is toch super 2025 om notities te gaan lopen maken, vind je niet?"
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "04:45",
+      "text": "Nou, ik kom bij heel veel bedrijven en ik zie denk ik één op de vijftien bedrijven die dat heeft geïmplementeerd."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "04:54",
+      "text": "Bizar."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "04:55",
+      "text": "Ja, ze zijn het gewoon gewend om een bepaalde manier te doen. Er is een bepaalde cultuur. Ik wil overal bij zijn. Mensen vinden het moeilijk om dat los te laten. En het kan ook wel gewoon een verandering van een workflow zijn. Wat ook weer misschien soms de grote stap is."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "05:07",
+      "text": "Verandering is. Want jij hebt natuurlijk heel veel te maken met verandering. Hoe is jouw leven dan veranderd nu door AI? Ben je rustiger of ben je juist drukker? Qua gevoel, je hebt het meer over hoe je bij je dag voelt wanneer je het meest effectief bent. Hoe heeft AI dat veranderd?"
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "05:23",
+      "text": "Ik denk niet echt dat ik rustiger of drukker ben. Ik doe wel echt precies wat ik wil."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "05:28",
+      "text": "De focus op de waarde zeg maar."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "05:30",
+      "text": "Ja, zeker. Maar ja, die wereld gaat zo enorm snel. We hadden het net ook al even in het voorgesprek over welke LLM is nou je favoriet. Ik ben nu weer in zo'n fase dat ik het even niet meer weet. Het is gewoon heel veel uitzoekwerk. Dus het is niet dat ik dan rustiger ben."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "05:47",
+      "text": "Maar aan welke zou je zeggen? Wat zijn de use cases waarvan je zegt die LLM of die tool?"
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "05:53",
+      "text": "Oké, ik ben altijd heel erg fan gebleven van Chedjibouti. Ik ben nu eigenlijk flink teleurgesteld in Chedjibouti. Ook al kent hij mij zo lekker en heb ik er alles helemaal in gesteld en alle flows staan er lekker in. Ik vind Gemini nu wel echt heel erg lekker. Ik vind hem slimmer eigenlijk. Bizar, ja."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "06:09",
+      "text": "Drie vooral, ja. Niet normaal."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "06:10",
+      "text": "Ja, zeker. En ja, Claude. Ja, daar heeft iedereen het natuurlijk nu een beetje over."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "06:15",
+      "text": "Nou, dat is wel weer een beetje hoe jij het persoonlijk je door het leven manoeuvreert. Je hebt twee... Use cases van ons meegenomen, van dingen die jij hebt gebouwd zelf om jouw leven leuker, makkelijker, productiever te maken."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "06:27",
+      "text": "Kan niet wachten."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "06:29",
+      "text": "Waar wil je mee beginnen?"
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "06:30",
+      "text": "Nou, ik wil allereerst wel even zeggen dat wat ik nu ga vertellen, dat is wel iets dat ik altijd laat bouwen, want je gaat vaak met gevoelige data werken. Je kan zelf met Make en Zapje bijvoorbeeld allerlei tools aan elkaar koppelen. Of met N8N, dat betekent eigenlijk dat je een als dan reactie hebt. Dus als ik iets in ToolX doe, dan gebeurt er ei. We kunnen heel veel winsten maken, allemaal door individuele chatbots allemaal meer in onze dag te krijgen. Daar kunnen we echt heel veel winst in maken. Er zijn natuurlijk allemaal weer nieuwe functies bij. Maar de laatste weken merk ik, nee maanden zeker, En merk ik dat als jij nog meer kijkt naar inderdaad, wat zijn nou jouw, hoe ziet jouw workflow eruit? Of in een bedrijf, als we in een team kijken, hoe ziet jullie workflow eruit?"
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "07:15",
+      "text": "Wat zijn nu hele repeterende inefficiënten van die frustrerende dingen, waar we gewoon allemaal geen zin in hebben? Dus dat handmatige werk van data in Excel zet ik zeg maar wat op."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "07:25",
+      "text": "Of CRM bijwerken, facturen."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "07:29",
+      "text": "Ja, bijvoorbeeld salesmeetings en dan een salespersoon die alleen maar aan het bellen is."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "07:32",
+      "text": "En dan een e-mail ernaar schrijven. Drama."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "07:34",
+      "text": "In het CRM vullen. Nou wat je dan kan doen om dus met een workflow te gaan werken, een AI dan in die workflow te implementeren, is jij belt, dat wordt uitgeschreven. Dat wordt getranscribeerd door een AI functie of tool."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "07:46",
+      "text": "Welke AI dan bijvoorbeeld?"
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "07:47",
+      "text": "Fireflies. Ik vind op dit moment Microsoft Teams eigenlijk best wel goed. Qua notileren. Ja, de facilitator is een nieuwe functie erin die echt wel het verschil maakt. Zal ik dat trouwens heel kort eens even vertellen? Ja, ik ben wel benieuwd waarom dat het verschil maakt. Als je nu heel veel mensen die Teams met transcriptie gebruiken, die zien dat het eigenlijk die tekst niet echt per se klopt. Het is alsof er iemand meeluistert die de tekst niet begrijpt."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "08:12",
+      "text": "Of het bezopen is."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "08:14",
+      "text": "Of bezopen, dat noem ik het ook vaak. Dat is het eigenlijk. Je hebt er echt wel wat aan. Vooral als je een GPT of agent hebt, een copilot, die dat dan weer kan verwerken. Maar als je naar andere tools kijkt, zoals Fireflies, dan ga je skip maken, samenvatting maken, actiepunten eruit halen. Dat werkt wel veel lekkerder, luistert ook veel beter mee. Maar de facilitator in Microsoft Teams, dat is een extra functie, die kun je aanzetten als je een extra licentie hebt. Een 365. En wat die doet, is dat je vooraf geeft aan, in je afspraak, dit is item 1, gaat over onderwerp X, item 1 duurt vijf minuten, item 2 gaat over onderwerp I, duurt tien minuten. En dan tijdens de meeting heb je aan de rechterkant iemand, nee niet iemand, de facilitator, je AI meeting buddy, die dan daarbij gaat helpen."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "09:02",
+      "text": "Dus die gaat aangeven, oké Sanne, over één minuut is item 1 afgelopen."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "09:05",
+      "text": "Het is gewoon meer live. Het is eigenlijk live Maya. Ik weet niet of je die aflevering hebt geluisterd, waarin we het hebben gehad over mijn AI workflows na meetings. Maar die heet dus Maya. Maar dan dus live naast je. Die mee eigenlijk coördineert gedurende de meeting."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "09:18",
+      "text": "Ja, dat kan die. Maar wat hij dus ook doet daarbij, is dat hij ook de natuurlijke schrijven schrijft. Dus dan heb je het onderwerp 1 staat al dan. En dan schrijft hij daaronder wat de samenvatting is. Plus het maakt de actiepunten helder te uiten. En dan kun je dus eigenlijk live dat aanvullen. Daarnaast staat het in de afspraak en dan heb je hem."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "09:34",
+      "text": "Jij bent natuurlijk gedragsexpert ook. Een van de dingen die ik heel veel met mijn collega's bespreek... ...en ook met al mijn klanten waarmee we het hebben over transcriberen tijdens meetings... ...is dat sommige mensen zeggen... ...ja, maar je wilt toch niet dat alles wordt opgenomen? Je wilt toch niet dat alle foute grappen worden opgenomen? En nou ja, zelfs juridische overwegingen. Wat is jouw overweging? Gaan mensen anders in meetings zijn dat we nu dingen opnemen? Van onze meetings op kantoor."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "10:00",
+      "text": "Wordt alles opgenomen. Ik zou het niet aanzetten als je een gevoelig gesprek hebt. Daar is het op dit moment nog te gevoelig voor. Daar gaan mensen zich wel in houden."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "10:08",
+      "text": "Maar waarom gevoelig? Want ik ben de enige die toegang heeft."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "10:11",
+      "text": "Tot dat transcript. Ja, maar als je een gevoelig gesprek hebt met iemand anders moet je altijd aangeven dat je het aanzet. Daar zijn we toe verplicht. En dan gaat die ander niet lekker het gesprek in. Kun je."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "10:23",
+      "text": "Je daarop voorstellen? Goeie vraag. Ik ben geen gedragspsycholoog, maar bij ons worden alle feedbackgesprekken opgenomen. Dat is fijn, want dan kan je namelijk over de afgelopen vijf keer zien hoe kan ik het beter doen. Maar vraag jij dan."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "10:38",
+      "text": "Wel, vind je het goed als dit wordt opgenomen? Tuurlijk, maar dat doe ik altijd. Als mensen nee zeggen, dan zeg."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "10:44",
+      "text": "Je wel oké. Ja, maar goed, dan werken ze niet bij ons. Want dat is gewoon onderdeel van het werken bij ons."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "10:48",
+      "text": "Alles wordt opgenomen. Ik benieuwd inderdaad, want zijn we dus nog niet zover dat die gesprekken op die manier dan goed gaan? Of dat mensen zich dan inhouden? En gaat dat dan veranderen, denk je? Als je van tevoren."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "11:03",
+      "text": "Zegt van oké, wij gaan deze data alleen maar lokaal opslaan. Of we hebben met Microsoft bepaalde afspraken waardoor het niet mag gebruikt worden om te trainen. Dat geeft wel veel meer rust. En als je dan ook de winst erbij vertelt van hierdoor hoef jij straks niet meer dat hele verslag te doen. Dan zijn we al snel over die drempel heen. Maar we zitten nu nog in zo'n... Het is allemaal zo nieuw voor veel mensen. Vooral mensen die al dertig jaar op dezelfde manier werken. Maar nieuw."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "11:27",
+      "text": "Dus voor mensen. Dus we zijn er als mens nog niet. Gedragsmatig. De technologie is er. Toch? Is."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "11:33",
+      "text": "Dat je conclusie? De technologie is er, maar nog niet goed genoeg in sommige gevallen. In veel gevallen. Heel vaak willen we het ook fysiek gebruiken. Dan is het ook nog niet goed genoeg. Ik ken geen tool op dit moment. Fireflies. Ja, maar die kan bijvoorbeeld de spreker niet goed detecteren. Die moet je dan daarna nog in. Nou ja, daar gaan we echt wel komen. En Fireflies kan gewoon heel vaak bij heel veel bedrijven niet gebruikt worden. Dus dan vallen ze toch weer op Teams. Nou dan heb je nu dus die nieuwe functie die echt wel beter is. Dus we gaan er echt wel komen. Mensen moeten eraan wennen. En ik denk aan beide kanten, aan de mensen aan de tech kant, dat het bergopwaarts gaat."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "12:09",
+      "text": "De komende jaren. We gaan even terug, want daar begonnen we bij jou. Hoe jij nu AI in je dagelijkse leven gebruikt. Ja, ik vertelde dus."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "12:17",
+      "text": "Net al over dat automatiseren en werkvloers, et cetera. Nou, ik heb agents hebben, dus AIC autonoom kunnen handelen en ik heb er twee die mij heel erg helpen. En de eerste is dat, ja, Al die informatie die je kunt vinden online over AI en alle podcasts en alle Amerikaanse informatie en alle nieuwsbrieven etcetera. Het is natuurlijk heel erg veel. Ik wil wel op de hoogte blijven. Dus waar ik eigenlijk altijd tegenaan loop is dat ik dan zoveel nieuwsbrieven nog die week te lezen heb. Dan kan ik ze met NotebookLM leuk ook in een podcast zetten en dan laten samenvatten en op de fiets luisteren. Dat doe ik dan ook weer niet. Dus wat ik nu heb gedaan is een agent gebouwd die vooraf geselecteerde vijftig betrouwbare bronnen voor mij afstruit."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "13:03",
+      "text": "Dat gaat van psychologisch onderzoek, relevant voor AI, over nieuwsbrieven, over New York Times, ook Nederlands nieuws. Iedere ochtend stuurt hij mij dan op de manier zoals ik het fijn vind met aantal woorden en de schrijfstijl en wat voor mij de kernvinding is, stuurt hij het naar mij in de mail. Eerst met het Algemeen Nieuws van wat gebeurt er op de wereld überhaupt en dan daaronder met het AIM Psychologie Nieuws. En zo blijf ik iedere ochtend in een paar minuten blijf ik bij. Oh, dit klinkt echt als een."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "13:32",
+      "text": "Droom voor mij. Hier hebben we het wel een."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "13:33",
+      "text": "Beetje over gehad. We hadden het er toen over. Wat ga je dan doen? Ga je dan scrapen? Of ga je dan e-mails, nieuwsbrieven? Dus ik ben heel benieuwd hoe dat dan werkt natuurlijk. En kun je voorbij."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "13:44",
+      "text": "Een firewall bijvoorbeeld. Een paywall."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "13:46",
+      "text": "De paywall inderdaad. Nou, vaak eigenlijk niet. Dat is wel een probleem. Bijvoorbeeld met New York Times heb je altijd een intro, een inleidingsstukje. Als je een abonnement hebt en je klikt op de link kun je daar wel in. Dus dan heb je wel de eerste info daarin staan. En als je klikt kun jij wel het artikel lezen als je het abonnement hebt. Ja, en dit kun je maken in bijvoorbeeld Make al. Dus hoef je geen Anytime voor te gebruiken. Make is best een gemakkelijke tool om te automatiseren. En het is wel gewoon heel belangrijk. Die prompt is bijvoorbeeld heel lang. Bij mij is betrouwbaarheid superbelangrijk. Valideren, dubbel valideren of het klopt wat erin staat. Natuurlijk blijft het fouten maken en hallucineren, maar dat kun je wel minimaliseren."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "14:31",
+      "text": "Plus ja, ik heb vooraf gewoon heel specifiek gekeken van wat zijn nou echt de bronnen die ik goed vind, et cetera. En ja, dat werkt veel beter dan als je in een Tjajipiti Taka, want dat kan ook. Dat."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "14:42",
+      "text": "Was mijn oplossing. Dan gaat het search."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "14:44",
+      "text": "Op het internet weer helemaal haywire."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "14:47",
+      "text": "Natuurlijk. Precies, ja. Dus dit is veel nauwkeuriger en veel meer op hoe ik het wil. En dat werkt voor mij gewoon heel goed. En."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "14:54",
+      "text": "Hoe werkt die? Wat is de bron van de daad? Waar wordt het aan? Kan je ons soort van de make-stappen doorlopen? Deze is."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "15:02",
+      "text": "Eigenlijk heel simpel. De volgende die ik ga vertellen van die agent is veel complexer. Deze is eigenlijk gewoon een aantal LLM's die gekoppeld zijn op één prompt en een dubbele validatie. Maar hij zoekt niks op."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "15:16",
+      "text": "Het internet dan? Hij gaat."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "15:17",
+      "text": "Bronnen af, jawel. Dus het is een."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "15:19",
+      "text": "LLM met search, die zoekt dagelijks zijn basis, die vindt information, die prompt hem dan daarna om een samenvatting te maken, die searcht het."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "15:28",
+      "text": "Eigenlijk bij jou. Dit is wel iets wat wij zelf gaan bouwen, toch? Ja, ik wil dat eigenlijk."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "15:36",
+      "text": "Wel graag hebben. Ik zou bijna zeggen, wat wil je ervoor hebben? Kan ik het zo overnemen? Het zijn."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "15:42",
+      "text": "Vier nodes, toch?"
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "15:44",
+      "text": "Nee, dat klopt. In Make of NETN gaan we het zelf bouwen. Kan ik het ook met."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "15:48",
+      "text": "Claude Code doen? Want daar werk ik momenteel."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "15:50",
+      "text": "Van. Waarschijnlijk wel. Kijk, CLI."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "15:52",
+      "text": "Developer, mooie kijk. Kunnen we hier een inschatting van geven, misschien voor de luisteraar, hoe lang, als je hier even goed induikt, hoe lang ben je hiermee bezig om dit juist te zetten? Hoe lang ben."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "16:03",
+      "text": "Je ermee bezig? Ja, ik moet zeggen, ik ben best wel lang bezig geweest. Ik heb dit samen met iemand gedaan ook, die er nog veel beter in is. Maar ik ben heel lang bezig geweest met, het was steeds net niet goed genoeg. Steeds fine-tunen en weer checken en toch weer niet de juiste bronnen. Daar zat veel tijd in, maar het zelf bouwen en het neerzetten van die knoppen eigenlijk en de brand bouwen, dat ja, een half uur."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "16:26",
+      "text": "Een half uur. Ja, vooral als."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "16:28",
+      "text": "Je de prompt... Het."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "16:29",
+      "text": "Zijn vijf knopjes. Ja, vooral als je de prompt laat maken. Ja, goed. Ik."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "16:33",
+      "text": "Vind het rap. Challenge accepted,"
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "16:35",
+      "text": "Denk ik, toch? Ik heb in ChatGPT ook gezegd van ik wilde het graag bouwen. Dit is allemaal wat ik interessant vind en dan helpt die mij mee met de prompt. En normaal gesproken zeg ik altijd in mijn training ook van laat nou niet altijd ChatGPT je prompt maken, ook al ga je een beeld maken of video, et cetera. Denk daar eerst zelf over na. Heel belangrijk. Maar in dit geval was het zoiets feitelijks dat het juist heel erg hielp. En dat vind ik."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "17:00",
+      "text": "Wel interessant, want jij."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "17:00",
+      "text": "Zegt eigenlijk vaak... Ik ben altijd heel erg van je moet het zelf ook begrijpen en kunnen doen. Dus ik ben altijd van het bouwen het zelf. We hebben in de podcast 20, 30 afleveringen lang gehad over deze nood en daar. Dus dat mensen het echt zelf gaan doen. Wat is jouw gedachte."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "17:16",
+      "text": "Achter laten doen? De mensen die de nerd zijn zoals wij zijn, zeker blijven doen, maar heel veel mensen vertonen al heel veel weerstand als ik een paar technische termen roep. Als je kijkt naar gedrag, een belangrijke gedragsstrategie of een techniek die ik gebruik is fluency. En dat betekent eigenlijk dat ik heel gemakkelijk praat over complexe materie. Als ik praat in LLM's en modellen, dan gaan mensen al denken, dus de meeste kenniswerkers eigenlijk, die weinig bezig zijn met dit soort onderwerpen, die luisteren al niet meer naar het werk. Dan al? LLM al? Ja, LLM is het woord dat nu wel is geaccepteerd, maar in de beginfase van alles niet. Dan luisteren we helemaal niet naar de rest van mijn boodschap, want dan heeft mijn lezing helemaal."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "17:57",
+      "text": "Geen zin meer. MCP's en embeddings, daar moet je niet over."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "17:59",
+      "text": "Hebben? Zeker niet. Dan gaan ze meteen naar huis. En zelfs misschien niet teveel over modellen praten. Ik probeer dat heel praktisch en laagdrempelig te maken, zodat ik complexe materie ook bij mensen krijg. Maar als je het dan hebt over zelf iets bouwen, die drempel is voor veel mensen veel te hoog. Sommigen vinden het leuk om te weten, maar als ik iets laat zien van NHN in een lezing aan advocaten, nou ja, dat heeft helemaal geen zin. Dus zij kunnen veel meer winnen in kritisch blijven, bepaalde chatbots gebruiken die ze mogen gebruiken, waar ze wel en niet voor gebruiken en hoe ze het dan goed kunnen gebruiken, zodat ze juist tijd hebben om meer hun brein te gebruiken in een bepaalde casus, dan dat ik ze dit laat doen. Dus jij zegt eigenlijk, de barrière is te groot."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "18:44",
+      "text": "Ik zeg dat de barrière, eigenlijk in alles, want dat vind ik eigenlijk wel mooi wat jullie doen, dus dat is vaak hele praktische voorbeelden geven. Als je gedrag wil veranderen en vooral een gewoonte wil veranderen voor mensen die al heel lang op dezelfde manier werken, maar ook überhaupt een gewoonte veranderen, dan is de allerbelangrijkste gedragsstap die je kan zetten is mini stapjes geven. Het heet de intention behavior gap, die is heel groot. Dat betekent, ik kan een intentie hebben om dit allemaal te gaan bouwen straks. Leuk, je hebt me geïnspireerd. Maar dan straks heb je toch een aantal mailtjes en denk je, laat maar zitten. En dan is gewoon de barrière te groot. Dus het remt. Mensen zijn allemaal mega lui, maar als je een stappenplan zou maken met oké, ik ga je vertellen hoe je het moet doen."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "19:29",
+      "text": "Je maakt een make account aan, dan maak je deze bol aan en hier zie je met screenshot en dan laat ik zien, dan doen mensen het wel als ze daar de tijd voor ruimte en vooral de motivatie voor hebben. Toch mooi dat we."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "19:40",
+      "text": "Dat zonder echte intentie met deze podcast dan blijkbaar wel doen. We."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "19:43",
+      "text": "Doen maar wat. En met de e-learning. Ja en de e-learning natuurlijk. Maar als ik voor mezelf spreek, wat voor mij inderdaad die drempel eerst groot maakt, is dat ik ja dan moet ik gaan zitten googelen hoe ik dan verder moet als ik weer vastloop en dat wordt ingewikkeld. Terwijl je gewoon het enige wat je eigenlijk hoeft te doen is aan een taalmodel dus vragen Kun je dit plan voor me uitschrijven of me hier stap voor stap doorheen helpen? En dan gaat het eigenlijk vanzelf. Dus je hebt gewoon iemand die."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "20:07",
+      "text": "Je handje vasthoudt. Ja, alleen ik heb nu zelf wel ook aan de lijf ondervonden dat het in N8N en MAKE en ZPIR ook, dat is nogal een stuk lastiger. Het is best wel."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "20:18",
+      "text": "Complex uiteindelijk voor 99,9 procent van de mensen. Maar ik denk wel het begrijpen hoe een workflow werkt. Want kijk, anders ga je nooit communiceren tegen een AI die straks dit voor je kan doen, wat je wil. Dus ik denk dat het procesmatig denken, dat is eigenlijk wat je moet trainen bij mensen. Ja, ik denk dat."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "20:35",
+      "text": "Dat sowieso belangrijk is en heel erg helpt. Alleen denk ik ook dat misschien niet voor iedereen is weggelegd. Het is goed om het een keer te weten. Mijn advies altijd is als je een groot team hebt en je hebt, ik zeg maar wat, een marketing team. Er zijn altijd twee of drie mensen die het leuk vinden om die processen uit te denken. Laat hen die verantwoordelijkheid nemen in plaats van die gedeelde verantwoordelijkheid van Iedereen."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "20:56",
+      "text": "Moet het snappen."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "20:59",
+      "text": "Uit mijn ervaring merk ik dat beter werkt. Er is al zoveel voor mensen, die zijn niet iedere dag op de hoogte. Dan is dat vaak nog wel een brug te veel. Misschien over twee jaar. Nou ja, dit is."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "21:12",
+      "text": "Natuurlijk ook wel uiteindelijk een soort van conclusie die je moet nemen. Welke skills heb je echt nodig in een AI wereld om competitief te zijn? Want ik ben er ook van overtuigd, als er twee mensen zijn die niet vanuit hun proces willen denken, dan ga je toch lekker weg. Dan neem je andere mensen weg. In jouw vorm bedrijf misschien. Eigenlijk, want we hebben het natuurlijk over de competitiviteit in de wereld met AI. Kijk, als jij nu niet het internet begrijpt en begrijpt dat er allemaal apps zijn en e-mail en Google, dan kan je toch niet meer werken. Hoe zie jij dat dan met een wereld met AI? Hoe verandert dat de arbeidsmarkt en het gedrag wat van."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "21:52",
+      "text": "Mensen nodig is? Hoe lang hebben wij erover gedaan om internet te begrijpen? Sommigen begrijpen het nog niet. Nou weet iedereen wel wat een agenda een mail is natuurlijk. AI, de vorm AI die we nu kennen, die veel te gebruiken, dat is dus in 2,5 jaar. Is het nou 2,5 jaar eigenlijk toch? Eind november, eind 2022. Dus er wordt heel veel van ons gevraagd en heel veel van onze mensen gevraagd. En het blijft maar doorgaan. En uiteindelijk draait het heel erg, vind ik, om gewoontevorming. Want we kunnen alles blijven weten over alles. Wij zitten in het werkveld en wij kunnen iedere dag op de hoogte blijven. Maar andere mensen hebben gewoon een fulltime baan met allemaal taken die ze moeten doen. Als je slimmer wil werken en AI wil toepassen, dan gaat het dus om slimmere gewoontes maken."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "22:38",
+      "text": "En dat gaat om dat stapje voor stapje bedenken. Oké, wat wil ik nou in mijn dag krijgen? Voor heel veel mensen is een chatbot nog lang niet een vanzelfsprekend deel van hun dag. Wat bedoel je daar nou mee met die chatbot? Een ChatGPT van Microsoft Copilot. Dat gebruiken in je dag. Volgens mij is op dit moment... Gewoon als."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "22:58",
+      "text": "Spanningspartner zeg maar. Als spanningspartner, maar ook."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "23:00",
+      "text": "Eigenlijk voor allerlei vraagstukken in je werk. Voor kenniswerkers is dat altijd iets dat we kunnen gebruiken. Of ook voor creatieven, maar dat zijn vaak andere tools. Maar ik las een onderzoek dat op dit moment volgens mij 14 procent van de mensen het dagelijks gebruikt op hun werk. Ongelooflijk. Dat is echt heel raar. Hoe."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "23:18",
+      "text": "Werken ze daarom? In."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "23:18",
+      "text": "Nederland of wereldwijd? Dit is Nederland en wij staan ook nog best."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "23:21",
+      "text": "Wel ver achteraan. Maar jij zegt eigenlijk, het zijn gewoontes, dus je moet eigenlijk kleine gewoontes. Bijvoorbeeld, ik ga elke dag vijf keer een AI."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "23:29",
+      "text": "Om hulp vragen. Ja, kijk, als jij die nonautileertool wil gaan gebruiken, maar je komt aan het einde van je meeting achter dat je die aan had moeten zetten, dan ben je te laat. En dat klinkt allemaal vrij dommig, maar dat is echt hoe ons gedrag werkt, want we zijn gewend om het op een bepaalde manier te doen. We hebben een bepaalde connectie in ons brein die zo dominant, want zo heb ik altijd gemiet. En dat moet je veranderen. En daar hebben we reminders van nodig. Hoe doe."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "23:51",
+      "text": "Je dat dan? Met post-its op de muur? Ik doe weleens bijvoorbeeld mijn autosleutels bij mijn lunch in de ijskast. Want dan kan ik."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "23:58",
+      "text": "Ze niet vergeten. Sommige mensen gaan met hun sportkleding aan slapen. Ze gaan sporten, dus jezelf makkelijk maken. Serieus? Gehoord het? Ja, dat zijn van die trucjes. Sport als klaarleggen."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "24:09",
+      "text": "In ieder geval. Maar wat doe je dan met AI? Heb je drie trucjes voor mensen om hun gewoonte met AI te veranderen? Ik heb niet voor."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "24:16",
+      "text": "Niets een post-it op mijn boek staan. Dus de voorkant heeft een post-it, dus dat is een reminder getekend. Wat ik vaak zeg na een sessie van mij is, zet de komende twee weken een reminder. Dus ofwel in je agenda, dat je start met AI, dat geeft gelijk een lekkere start, open zo'n chatbot, stel je eerste vraag. Of zet een reminder in, ik gebruik bijvoorbeeld in mijn telefoon zo'n reminder app. Die werkt heel chill, een hele simpele app. Die is op een bepaalde tijd een reminder. Of pak ergens een post-it. Of bouw."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "24:47",
+      "text": "Een N8N workflow. Nee, grapje. Of inderdaad, bouw."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "24:51",
+      "text": "Een N8N workflow. Dan word je hier."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "24:52",
+      "text": "Ook niet op een gegeven moment immuun van. Ik had dit op een gegeven moment ook. Dat ik heel lang dan geen sales deed tot het geld op was. Dan ging ik weer sales doen. Dat moest ik wel. Dan had ik zo'n blok inderdaad in mijn agenda. De salesblok. Maar ja, ik zag dat. Je kan."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "25:06",
+      "text": "Het ook belonen. Ik."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "25:06",
+      "text": "Ga weer door. Precies en wat hierbij belangrijk is en dat is eigenlijk het fijne aan die chatbots. Als jij weet hoe je de juiste vragen stelt en waarvoor je het gebruikt en als je toepast op werk dat je dat toch allemaal moet doen. Je hoeft niks nieuws te bedenken, bedenk gewoon wat moet ik doen vandaag en ik ga het uitproberen. Dan heeft het waarschijnlijk eigenlijk vrijwel altijd gelijk een positief effect. En die positieve effect, positieve reinforcement, klein dopaminepiekje zorgt ervoor dat we het vaker gaan doen. En dat is het voordeel van het snelle werken van GPT, het snelle voordeel dat je krijgt. En dat stimuleert heel erg die nieuwe connectie in ons brein. Vind jij dat de."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "25:39",
+      "text": "Baas promotie zou moeten geven en bonussen aan mensen die dan die gewoonte aanleren? Want dat is een manier van het natuurlijk incentivizen. Dat je zegt, ik heb klanten die een half maand salaris uitkeren aan de beste."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "25:52",
+      "text": "GPT. Ja, jeetje. Ja, ik ben heel erg voorstander van intrinsieke motivatie en intrinsieke mensen slaan of bonus geven. Dus wat ik echt heel erg op stuur is heel erg het relevant maken van oké, wat doe je nou deze week? Waar heb je echt geen zin in? Wat kost je al heel veel tijd? Dat is die dan intrinsiek mensen motiveren."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "26:12",
+      "text": "Heeft veel effect. Ja, dus wat vind je nou echt saai of zuur om te doen in je werk? En dan gaan we dat weg proberen te managen, zodat jouw."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "26:21",
+      "text": "Werk makkelijker wordt. Ja, dus eigenlijk voor jezelf bedenken van oké, want AI is niet een alles heel goed. We moeten juist ook heel goed bedenken waar we zelf meer tijd aan willen besteden en de belofte van AI is wel repeterend werk inkorten. Repeterend werk vinden we vaak minder leuk, zodat we juist meer Denkruimte, headspace creëren voor de dingen waar wij als mens beter in zijn. En dat gaat vaak dus om creatie, strategie en dus die gesprekken voeren. En dat zou heel erg mooi zijn, toch? Dus als we niet meer allemaal dat snelle te doen, eerst afvinken en al die kleine dingen moeten doen, maar dat we juist ons brein goed kunnen gaan gebruiken en die afweging maken. Dus ja, wat is dan het repeteren dat we willen inkorten?"
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "27:00",
+      "text": "Hoe vaak zijn we rapportages aan het maken en analyse aan het doen en alles aan het invullen? Misschien is dat wel iets dat AI beter kan. Of in het klein voor jezelf. Als je iedere week een vacature moet opstellen. Ik zeg maar wat. Laat dan maar een GPT die daarop is getraind. En heb zelf de ruimte om het te verbeteren. Dat zou dan een mini voorbeeld kunnen zijn. Zodat jij juist ruimte hebt om dat echt beter te maken in kwaliteit. En vaak vinden we dat nog leuker. Want je krijgt leuke nieuwe ideeën en."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "27:28",
+      "text": "Dat soort dingen. Dus tip 1 is eigenlijk maak het heel erg behapbaar, heel erg klein. En tip 2 is set."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "27:35",
+      "text": "Reminders. Inderdaad, allebei. En een andere tip is experimenteren. Toch wel proberen met dat time blocking wat je zei. Een uur bijvoorbeeld in je week te blokken om te experimenteren. Want zonder te experimenteren ga je nooit achterkomen wat van jou werkt. Dus in dat uur dan bekijken, oké wat moet ik allemaal doen? Ga nou geen nieuwe dingen bedenken. Want dan gaat ons brein weer zeggen, je hebt geen tijd om het uit te zoeken. Nee, ik doe het gelijk op werk dat ik toch allemaal moet doen. Probeer het gewoon eens. Gooi je to-do-list erin. Maak een screenshot van je agenda. Wees."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "28:06",
+      "text": "Niet bang gewoon. Om de knop."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "28:08",
+      "text": "In te drukken. Ik zit er ook."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "28:11",
+      "text": "Over na te denken, misschien helpt het ook wel om gewoon met iemand die het in je omgeving ook nog niet kan of die er misschien al mee is begonnen als je een beetje geluk hebt. Dat je dat samen gaat doen en dat je met elkaar kan sturen van kijk ik heb nu dit gemaakt. Een."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "28:23",
+      "text": "AI accountability partner. Dat je het."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "28:25",
+      "text": "Samen gaat doen. Het maakt het a gezelliger en b hou je er ook met elkaar aan dat je ook wel daadwerkelijk."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "28:31",
+      "text": "Dingen gaat doen. En elkaar inspireren is eigenlijk ook een hele belangrijke, want je kunt in een team zitten. Ik zeg ook altijd van, oké, als je een meeting hebt iedere week met elkaar, zet het vijf minuten op de agenda. Vertel elkaar waar je het wel en niet voor gebruikt. En dan inspireer je elkaar. Oh ja, wow, zij gebruiken de tafel, dat kan ik misschien ook doen. Of de mensen die juist al wat verder zijn, help de mensen die wat minder ver zijn. Ga er eens naast zitten. Of inderdaad, je kan ook gelijkwaardigen naast elkaar zetten. Maar."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "28:59",
+      "text": "Iemand, zoek iemand. Ik grijp iemand."
+    },
+    {
+      "speaker": "Wouter van Haaften",
+      "time": "29:01",
+      "text": "In z'n nekvel. Volgens mij moeten we een beetje afsluiten en gaan we nog veel meer praten over jouw ervaringen. Maar je zei pas op met wat je."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "29:10",
+      "text": "Erin zet. Waarom? Er zijn tegenwoordig steeds vaker richtlijnen van waar bedrijven willen dat hun medewerkers zich aan houden. Hou je daar wel aan? Uiteindelijk werk je wel met externe servers. Zoals je met Chachabuti werkt. De US aan de datacenters. En ik denk dat het goed is dat we kritisch blijven. Alleen ik vind ook dat we soms nog veel te veel bezig zijn met de AVG. We hadden een paar jaar geleden nog telefoonboeken waar al onze adressen in stonden. En nu zijn we heel erg daarmee bezig. Wat belangrijk is, maar ik denk dat het soms iets te ver gaat. Maar richtlijnen en mensen handvatten bieden, dat is sowieso nodig. Wat een."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "29:51",
+      "text": "Acte. Sanne, dankjewel. We zijn zo erg erin gedoken dat we Usecase 2 even voor de volgende aflevering bewaren. Je blijft nog."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "30:00",
+      "text": "Even zitten. Gezellig. En dat gaat dus."
+    },
+    {
+      "speaker": "Milou Brand",
+      "time": "30:01",
+      "text": "Over dat jij een persoonlijke assistent hebt gebouwd. Ja. Dus ik."
+    },
+    {
+      "speaker": "Sanne Cornelissen",
+      "time": "30:04",
+      "text": "Ben."
+    },
+    {
+      "speaker": "Guido van Winden",
+      "time": "30:04",
+      "text": "Heel benieuwd. Zeker. Dit was AI Je Nieuwe Collega voor deze week. Wil je dan meer weten? Check dan even onze website AIJeNieuweCollega.nl. Daar vind je alle transcripts, meer informatie over de tools die we uitleggen en natuurlijk de link naar onze e-learning."
+    }
+  ]
+}

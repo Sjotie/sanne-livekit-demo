@@ -1,0 +1,122 @@
+[
+  {
+    "model": "deepseek-ai/DeepSeek-V3.1",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 0.607,
+    "total_s": 2.113,
+    "chars": 177,
+    "preview": "Begin met het identificeren van repetitieve taken die je kunt automatiseren. Blijf daarnaast kritisch op de output en ontwikkel je eigen expertise om AI-resulta",
+    "error": null
+  },
+  {
+    "model": "deepseek-ai/DeepSeek-V3.1",
+    "run": 2,
+    "status": 200,
+    "ttft_s": 0.597,
+    "total_s": 1.032,
+    "chars": 177,
+    "preview": "Begin met het identificeren van repetitieve taken die je kunt automatiseren. Blijf daarnaast kritisch op de output en ontwikkel je eigen expertise om AI-resulta",
+    "error": null
+  },
+  {
+    "model": "zai-org/GLM-4.7",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 0.336,
+    "total_s": 0.635,
+    "chars": 114,
+    "preview": "Begin klein en kies één tool die direct tijd bespaart. Blijf de resultaten controleren, want AI maakt soms fouten.",
+    "error": null
+  },
+  {
+    "model": "zai-org/GLM-4.7",
+    "run": 2,
+    "status": 200,
+    "ttft_s": 0.582,
+    "total_s": 0.763,
+    "chars": 114,
+    "preview": "Begin klein en kies één tool die direct tijd bespaart. Blijf de resultaten controleren, want AI maakt soms fouten.",
+    "error": null
+  },
+  {
+    "model": "moonshotai/Kimi-K2.6",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 1.122,
+    "total_s": 2.048,
+    "chars": 143,
+    "preview": "Begin met één simpel, terugkerend klusje dat je nu zelf doet. Test een gratis tool zoals ChatGPT of Copilot, en kijk of het echt tijd bespaart.",
+    "error": null
+  },
+  {
+    "model": "moonshotai/Kimi-K2.6",
+    "run": 2,
+    "status": 200,
+    "ttft_s": 0.75,
+    "total_s": 2.307,
+    "chars": 151,
+    "preview": "Begin met één concreet, terugkerend taakje dat je nu zelf doet. Test een tool zoals ChatGPT of Copilot een week, en evalueer of het echt tijd bespaart.",
+    "error": null
+  },
+  {
+    "model": "nvidia/Nemotron-120B-A12B",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 2.591,
+    "total_s": 4.454,
+    "chars": 278,
+    "preview": "Begin met een duidelijk doel: bepaal welke taak je wilt automatiseren of verbeteren met AI, zoals het schrijven van e-mails of het analyseren van data. Kies een",
+    "error": null
+  },
+  {
+    "model": "nvidia/Nemotron-120B-A12B",
+    "run": 2,
+    "status": 200,
+    "ttft_s": 0.592,
+    "total_s": 0.952,
+    "chars": 203,
+    "preview": "Begin met een duidelijk gedefinieerd probleem dat je wilt oplossen, en kies een AI-tool die daar direct op aansluit. Test het klein, leer snel, en breid pas uit",
+    "error": null
+  },
+  {
+    "model": "openai/gpt-oss-120b",
+    "run": 1,
+    "status": 200,
+    "ttft_s": null,
+    "total_s": 1.275,
+    "chars": 0,
+    "preview": "",
+    "error": null
+  },
+  {
+    "model": "openai/gpt-oss-120b",
+    "run": 2,
+    "status": 200,
+    "ttft_s": null,
+    "total_s": 1.297,
+    "chars": 0,
+    "preview": "",
+    "error": null
+  },
+  {
+    "model": "zai-org/GLM-5",
+    "run": 1,
+    "status": 200,
+    "ttft_s": 6.561,
+    "total_s": 7.161,
+    "chars": 138,
+    "preview": "Begin klein met een taak die veel tijd kost en weinig denkwerk vraagt. Leer de basis van goed instrueren en bouw van daaruit langzaam uit.",
+    "error": null
+  },
+  {
+    "model": "zai-org/GLM-5",
+    "run": 2,
+    "status": 200,
+    "ttft_s": 0.626,
+    "total_s": 1.206,
+    "chars": 152,
+    "preview": "Begin met een kleine taak die je dagelijks handmatig doet en automatiseer die. Zo leer je de mogelijkheden kennen zonder direct grote risico's te nemen.",
+    "error": null
+  }
+]

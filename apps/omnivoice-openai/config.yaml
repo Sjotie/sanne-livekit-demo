@@ -1,0 +1,35 @@
+model_name: sanne-omnivoice-openai
+description: OpenAI-compatible OmniVoice TTS endpoint with a baked Sanne clone profile.
+
+base_image:
+  image: pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime
+
+build_commands:
+  - apt-get update && apt-get install -y --no-install-recommends ffmpeg curl ca-certificates && rm -rf /var/lib/apt/lists/*
+  - pip install --no-cache-dir "omnivoice-server[formats]==0.2.2"
+  - mkdir -p /workspace/omnivoice-profiles/sanne
+  - curl -L --fail --retry 5 --retry-delay 3 "https://podcast-download.azerion.com/azerion/ai-je-nieuwe-collega/4d035645-ad2b-4fda-b934-bedf7417cf30.mp3" -o /tmp/sanne-source.mp3
+  - ffmpeg -hide_banner -loglevel error -y -ss 00:24:17 -to 00:24:25 -i /tmp/sanne-source.mp3 -af "afade=t=in:st=0:d=0.04,afade=t=out:st=7.94:d=0.06,highpass=f=70,lowpass=f=11000" -ac 1 -ar 24000 /workspace/omnivoice-profiles/sanne/ref_audio.wav
+  - python -c 'import json, pathlib; pathlib.Path("/workspace/omnivoice-profiles/sanne/meta.json").write_text(json.dumps({"name":"sanne","ref_text":"Op mijn boek staan. Dus de voorkant heeft een post-it, dus dat is een reminder getekend.","created_at":"2026-04-22T00:00:00Z"}, ensure_ascii=False, indent=2))'
+
+docker_server:
+  start_command: omnivoice-server --host 0.0.0.0 --port 8000 --device cuda --model k2-fsa/OmniVoice --profile-dir /workspace/omnivoice-profiles --num-step 16 --max-concurrent 1 --timeout 120 --log-level info
+  server_port: 8000
+  readiness_endpoint: /health
+  liveness_endpoint: /health
+  predict_endpoint: /v1/audio/speech
+
+resources:
+  accelerator: L4
+  use_gpu: true
+  cpu: "4"
+  memory: 16Gi
+
+runtime:
+  predict_concurrency: 1
+
+environment_variables:
+  OMNIVOICE_DEFAULT_VOICE: "female, dutch accent"
+  OMNIVOICE_STREAM_CHUNK_MAX_CHARS: "180"
+  OMNIVOICE_REQUEST_TIMEOUT_S: "120"
+  OMNIVOICE_MAX_CONCURRENT: "1"
