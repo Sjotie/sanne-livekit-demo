@@ -1,0 +1,109 @@
+.animated-list-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.animated-list-scroll {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.animated-list-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.animated-list-items {
+  list-style: none;
+  margin: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.animated-list-items-center {
+  padding-top: 50%;
+}
+
+.animated-list-items-bottom {
+  padding-top: 100%;
+}
+
+.animated-list-items li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Fade edges */
+.animated-list-fade-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.animated-list-fade-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.animated-list-item-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .animated-list-item-card {
+    background-color: #0a0a0a;
+    border-color: #262626;
+  }
+}
+
+.animated-list-item-text {
+  color: #111827;
+}
+
+@media (prefers-color-scheme: dark) {
+  .animated-list-item-text {
+    color: #fff;
+  }
+}
+
+.animated-list-item-clickable {
+  cursor: pointer;
+}
+
+.animated-list-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+
+.animated-list-swipe-indicator {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.animated-list-swipe-indicator span {
+  color: #ef4444;
+  font-weight: 600;
+  font-size: 0.875rem;
+}

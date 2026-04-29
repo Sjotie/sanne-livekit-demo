@@ -1,0 +1,14 @@
+/* Blur Highlight Container */
+.blur-highlight-container {
+  will-change: filter, opacity;
+}
+
+/* Highlight Text Wrapper */
+.highlight-text-wrapper {
+  display: inline;
+}
+
+/* Highlight Text Content */
+.highlight-text-content {
+  display: inline;
+}

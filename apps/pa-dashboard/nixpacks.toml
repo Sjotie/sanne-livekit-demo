@@ -1,0 +1,13 @@
+providers = ["bun"]
+
+[phases.setup]
+aptPkgs = ["curl"]
+
+[phases.install]
+cmds = ["bun install --frozen-lockfile"]
+
+[phases.build]
+cmds = ["bun run build"]
+
+[start]
+cmd = "bun run start"

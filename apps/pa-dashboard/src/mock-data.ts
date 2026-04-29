@@ -1,0 +1,398 @@
+import type { CalendarEvent, Contact, Email, MissedCall } from "./types";
+
+const today = new Date().toISOString().split("T")[0];
+
+export const USER = {
+  name: "Sanne Cornelissen",
+  initials: "SC",
+  email: "hello@sanne.amsterdam",
+};
+
+export const INITIAL_CONTACTS: Contact[] = [
+  {
+    id: "c-sprekershuys",
+    name: "Lotte Sprekershuys",
+    initials: "LS",
+    email: "info@sprekershuys.nl",
+    role: "Boekingen Sprekershuys (Utrecht)",
+  },
+  {
+    id: "c-spectrum",
+    name: "Marit Spectrum",
+    initials: "MS",
+    email: "redactie@spectrumboeken.nl",
+    role: "Redacteur Uitgeverij Spectrum",
+  },
+  {
+    id: "c-thomas",
+    name: "Thomas Damen",
+    initials: "TD",
+    email: "thomas@twofeetup.com",
+    role: "TwoFeetUp — relatie & commercieel",
+  },
+  {
+    id: "c-sjoerd",
+    name: "Sjoerd Tiemensma",
+    initials: "ST",
+    email: "sjoerd@twofeetup.com",
+    role: "TwoFeetUp — tech voor demo",
+  },
+  {
+    id: "c-leonie",
+    name: "Leonie Forsman",
+    initials: "LF",
+    email: "leonie@twofeetup.com",
+    role: "TwoFeetUp — finance & facturen",
+  },
+  {
+    id: "c-denktank",
+    name: "Joris DenkTank",
+    initials: "JD",
+    email: "redactie@denkproducties.nl",
+    role: "Producer DenkTank podcast",
+  },
+  {
+    id: "c-bnr",
+    name: "Joe van Burik",
+    initials: "JB",
+    email: "redactie@bnr.nl",
+    role: "BNR — De Grote Tech Show",
+  },
+  {
+    id: "c-linda",
+    name: "Redactie LINDA.",
+    initials: "LD",
+    email: "redactie@linda.nl",
+    role: "LINDA. column",
+  },
+  {
+    id: "c-heineken",
+    name: "Hannah Olijhoek",
+    initials: "HO",
+    email: "h.olijhoek@heineken.com",
+    role: "Heineken — HR keynote",
+  },
+  {
+    id: "c-asml",
+    name: "Dick Arts",
+    initials: "DA",
+    email: "d.arts@asml.com",
+    role: "ASML — engineering keynote",
+  },
+  {
+    id: "c-abn",
+    name: "Denise Thomson",
+    initials: "DT",
+    email: "denise.thomson@abnamro.nl",
+    role: "ABN AMRO — innovatie team",
+  },
+  {
+    id: "c-lief",
+    name: "LIEF Amsterdam",
+    initials: "LA",
+    email: "events@liefamsterdam.nl",
+    role: "Locatie boeklancering 6 mei",
+  },
+  {
+    id: "c-mama",
+    name: "Mama",
+    initials: "MA",
+    email: "mama@sanne.local",
+    role: "Privé — moeder",
+  },
+];
+
+export const INITIAL_MISSED_CALLS: MissedCall[] = [
+  {
+    id: "call-mama",
+    from: "Mama",
+    fromInitials: "MA",
+    relation: "moeder",
+    time: "14:12",
+    note: "Gemiste oproep tijdens reistijd naar de studio.",
+    handled: false,
+  },
+];
+
+export const INITIAL_EVENTS: CalendarEvent[] = [
+  {
+    id: "evt-focus-ochtend",
+    title: "Schrijfblok — column LINDA.",
+    startTime: "09:00",
+    endTime: "10:00",
+    attendees: [],
+    color: "#9a8de9",
+  },
+  {
+    id: "evt-spectrum",
+    title: "Call Spectrum — drukproef This is not AI",
+    startTime: "10:15",
+    endTime: "10:45",
+    attendees: ["Marit Spectrum"],
+    color: "#6d56f9",
+  },
+  {
+    id: "evt-asml",
+    title: "Keynote ASML — AI in engineering teams",
+    startTime: "11:30",
+    endTime: "13:00",
+    attendees: ["Dick Arts", "ASML L&D"],
+    color: "#d6ff02",
+  },
+  {
+    id: "evt-lunch",
+    title: "Lunch + reistijd Veldhoven → Amsterdam",
+    startTime: "13:00",
+    endTime: "14:30",
+    attendees: [],
+    color: "#9a8de9",
+  },
+  {
+    id: "evt-denktank",
+    title: "Opname DenkTank podcast",
+    startTime: "15:00",
+    endTime: "16:00",
+    attendees: ["Joris DenkTank"],
+    color: "#6d56f9",
+  },
+  {
+    id: "evt-thomas",
+    title: "1:1 Thomas (TwoFeetUp) — persvermelding launch",
+    startTime: "16:30",
+    endTime: "17:00",
+    attendees: ["Thomas Damen"],
+    color: "#6d56f9",
+  },
+  {
+    id: "evt-shortclub",
+    title: "Shortclub nieuwsbrief afmaken",
+    startTime: "17:15",
+    endTime: "17:45",
+    attendees: [],
+    color: "#9a8de9",
+  },
+];
+
+export const INITIAL_EMAILS: Email[] = [
+  {
+    id: "mail-spectrum",
+    from: "Marit Spectrum",
+    fromInitials: "MS",
+    subject: "Drukproef This is not AI — laatste check",
+    preview:
+      "Hi Sanne! De drukproef is doorgevoerd, kun jij nog één keer akkoord geven? Daarna kan 'ie naar de drukker...",
+    body:
+      "Hi Sanne,\n\nDe laatste correcties zijn doorgevoerd in de drukproef van This is not AI. Kun jij nog één keer een check doen op het voorwoord en hoofdstuk 1 (de bladzijden zitten in de gedeelde Drive)?\n\nZodra jouw akkoord binnen is, gaat 'ie naar de drukker. Deadline 30 april zodat we 1 mei in winkels liggen.\n\nWe zijn supertrots — kanjers gaan we worden!\n\nGroet,\nMarit\nUitgeverij Spectrum",
+    date: `${today}T08:42:00`,
+    read: false,
+    archived: false,
+    starred: true,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+  {
+    id: "mail-sprekershuys",
+    from: "Lotte Sprekershuys",
+    fromInitials: "LS",
+    subject: "Aanvraag keynote — Heijmans 12 juni",
+    preview:
+      "Hoi Sanne, nieuwe aanvraag van Heijmans voor 12 juni. Talk van 60 min over AI in de bouw. Tarief...",
+    body:
+      "Hoi Sanne,\n\nNieuwe aanvraag binnengekomen via onze site:\n\nKlant: Heijmans (Hannah Olijhoek)\nDatum: 12 juni 2026, ochtend\nDuur: 60 min keynote + 30 min Q&A\nLocatie: hoofdkantoor Rosmalen\nThema: hoe gebruikt onze L&D-afdeling AI zonder dat het werk inwisselbaar wordt\nTarief: standaard pakket €3.499\n\nKun je laten weten of jij die ochtend nog vrij hebt? Dan stuur ik de offerte vandaag nog door.\n\nGroet,\nLotte",
+    date: `${today}T07:55:00`,
+    read: false,
+    archived: false,
+    starred: false,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+  {
+    id: "mail-asml",
+    from: "Dick Arts",
+    fromInitials: "DA",
+    subject: "Bevestiging keynote vandaag — 11:30 Veldhoven",
+    preview:
+      "Hi Sanne, alles staat klaar voor vandaag. Parkeerplek P3, badge bij receptie. Lunch erna in...",
+    body:
+      "Hi Sanne,\n\nAlles staat klaar voor jouw keynote vandaag bij ASML. Even het laatste nog door:\n\n• 11:00 — aankomst, parkeerplek P3, badge bij receptie hoofdgebouw\n• 11:30 — keynote 'AI in engineering teams', auditorium A\n• 12:30 — Q&A en netwerken\n• 13:00 — lunch met L&D-board\n\nWe hebben circa 220 engineers in de zaal en nog eens 300 op livestream. Verheugd je weer hier te hebben!\n\nGroet,\nDick",
+    date: `${today}T07:30:00`,
+    read: true,
+    archived: false,
+    starred: true,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+  {
+    id: "mail-denktank",
+    from: "Joris DenkTank",
+    fromInitials: "JD",
+    subject: "Vragen voor de opname vanmiddag",
+    preview:
+      "Hey Sanne! Vanmiddag 15:00 staan we klaar. Hieronder de vragen waarmee we starten...",
+    body:
+      "Hey Sanne!\n\nVerheugen ons op de opname vanmiddag. Onze gespreksrichting:\n\n1. Wat is de grootste misvatting over AI op de werkvloer?\n2. Hoe blijf je zelf scherp denken als alles 'gewoon werkt' met AI?\n3. Het boek This is not AI — waarom nu?\n4. Een tip die mensen morgen al kunnen toepassen.\n\nWe staan vanaf 14:45 klaar in de studio (Korte Leidsedwarsstraat). Mocht je later zijn door ASML — geen stress, we schuiven gewoon op.\n\nCiao,\nJoris",
+    date: `${today}T07:18:00`,
+    read: false,
+    archived: false,
+    starred: false,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+  {
+    id: "mail-thomas",
+    from: "Thomas Damen",
+    fromInitials: "TD",
+    subject: "TwoFeetUp persvermelding — voorstel voor launch",
+    preview:
+      "Hey Sanne, zoals besproken — voorstel voor hoe TwoFeetUp benoemd wordt bij de launch op 6 mei...",
+    body:
+      "Hey Sanne,\n\nZoals besproken, hierbij ons voorstel voor de TwoFeetUp persvermelding rondom de launch:\n\n• Persbericht: 'Tech-partner voor de live AI-demo: TwoFeetUp'\n• Op locatie: kleine credit op het demo-scherm zelf\n• Social: Sjoerd post een korte tech-uitleg na het event\n\nLaat me weten wat je ervan vindt — vanmiddag in de 1:1 kunnen we het kort doornemen?\n\nDank!\nThomas",
+    date: `${today}T06:48:00`,
+    read: false,
+    archived: false,
+    starred: true,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+  {
+    id: "mail-bnr",
+    from: "Joe van Burik",
+    fromInitials: "JB",
+    subject: "BNR Tech Show — datum tweede aflevering?",
+    preview:
+      "Hi Sanne, na het succes van de eerste keer willen we je graag terug. Heb je een paar voorkeursdata...",
+    body:
+      "Hi Sanne,\n\nNa het succes van de eerste keer willen we je graag terug bij De Grote Tech Show. Het idee: 30 min over hoe je AI inzet zonder dat het je werk overneemt — perfect rondom de boek-launch.\n\nHeb je een paar voorkeursdata in mei of juni? Live-uitzending dinsdag 19:00, dus we plannen graag op tijd.\n\nGroet,\nJoe",
+    date: `${today}T06:20:00`,
+    read: false,
+    archived: false,
+    starred: false,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+  {
+    id: "mail-mama-call",
+    from: "Mama",
+    fromInitials: "MA",
+    subject: "Gemiste oproep",
+    preview:
+      "Je moeder probeerde je te bellen terwijl je onderweg was naar de podcaststudio.",
+    body:
+      "Gemiste oproep van Mama om 14:12.\n\nContext: je agenda zit vol tot na de opname van DenkTank. Geen inhoud bekend.",
+    date: `${today}T14:12:00`,
+    read: false,
+    archived: false,
+    starred: true,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+  {
+    id: "mail-linda",
+    from: "Redactie LINDA.",
+    fromInitials: "LD",
+    subject: "Reminder column — deadline vrijdag",
+    preview:
+      "Lieve Sanne, vrijdag 11:00 willen we je column-stuk voor de meinummer. Onderwerp blijft AI-detox?",
+    body:
+      "Lieve Sanne,\n\nKleine reminder: vrijdag 11:00 hebben we je column nodig voor het meinummer. Onderwerp blijft 'AI-detox: een week zonder' zoals we hadden afgesproken? 800 woorden, gewoon jouw stem.\n\nHet wordt een mooie!\n\nLiefs,\nRedactie LINDA.",
+    date: `${today}T06:05:00`,
+    read: true,
+    archived: false,
+    starred: false,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+  {
+    id: "mail-leonie",
+    from: "Leonie Forsman",
+    fromInitials: "LF",
+    subject: "Factuur boeklancering — verstuurd?",
+    preview:
+      "Hi Sanne, even een check: is de factuur van €2.000 voor de demo al binnen bij Spectrum/LIEF?",
+    body:
+      "Hi Sanne,\n\nEven een check vanuit finance — de factuur van €2.000 voor de live demo op 6 mei staat nog open in ons systeem. Heb jij hem al doorgezet naar Spectrum of LIEF? Anders zet ik 'm vandaag opnieuw klaar.\n\nDank!\nLeonie\nTwoFeetUp",
+    date: `${today}T05:42:00`,
+    read: false,
+    archived: false,
+    starred: false,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+  {
+    id: "mail-abn",
+    from: "Denise Thomson",
+    fromInitials: "DT",
+    subject: "Aanvraag inhouse workshop ABN AMRO",
+    preview:
+      "Beste Sanne, vanuit ABN AMRO Innovation team — interesse in een halve-dag workshop voor 30 mensen...",
+    body:
+      "Beste Sanne,\n\nVanuit het ABN AMRO Innovation team — we hebben veel positiefs gehoord over jouw aanpak en zouden graag een halve-dag workshop organiseren voor circa 30 mensen uit ons innovatieteam. Onderwerp: hoe we AI als denkversneller inzetten zonder dat we zelf op auto-piloot gaan.\n\nVoorkeursdatum: laatste week mei of eerste week juni. Locatie: ons kantoor op de Zuidas.\n\nGraag horen we of dit haalbaar is.\n\nMet vriendelijke groet,\nDenise Thomson\nABN AMRO Innovation",
+    date: `${today}T05:10:00`,
+    read: false,
+    archived: false,
+    starred: false,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+  {
+    id: "mail-lief",
+    from: "LIEF Amsterdam",
+    fromInitials: "LA",
+    subject: "Bevestiging boeklancering 6 mei — runsheet bijgevoegd",
+    preview:
+      "Hoi Sanne, runsheet voor 6 mei staat klaar. 18:30 doors, 19:30 jouw verhaal, 20:15 borrel...",
+    body:
+      "Hoi Sanne,\n\nRunsheet voor de boeklancering op 6 mei is klaar:\n\n• 18:00 — soundcheck + tech-rehearsal AI-demo (Sjoerd)\n• 18:30 — doors open, ontvangst met agents in foyer\n• 19:00 — welkom door Spectrum\n• 19:30 — jouw verhaal + live demo\n• 20:15 — boekverkoop, signeren, borrel\n• 22:00 — einde\n\nWe verwachten 320 gasten. Tot 6 mei!\n\nGroet,\nLIEF",
+    date: `${today}T04:30:00`,
+    read: true,
+    archived: false,
+    starred: false,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+  {
+    id: "mail-shortclub",
+    from: "Shortclub (eigen nieuwsbrief)",
+    fromInitials: "SC",
+    subject: "Concept #94 klaar — even nalezen?",
+    preview:
+      "Concept klaar in Drive. Onderwerp deze week: hoe ik mijn AI-collega inzette voor focusblokken...",
+    body:
+      "Hi Sanne,\n\nHet concept voor Shortclub #94 staat klaar in Drive (mapje 'nieuwsbrieven/2026/mei'). Onderwerp deze week: 'Hoe ik mijn AI-collega inzette voor focusblokken'. 380 woorden, klaar voor jouw lees-rondje.\n\nGeplande verzending: vrijdag 09:00.",
+    date: `${today}T03:45:00`,
+    read: true,
+    archived: false,
+    starred: false,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+  {
+    id: "mail-spam",
+    from: "AI Productivity Summit",
+    fromInitials: "AI",
+    subject: "[Sponsor opportunity] €15.000 spreekslot — last chance",
+    preview:
+      "Dear Sanne, we have one premium speaking slot left at our AI Productivity Summit in Dubai...",
+    body:
+      "Dear Sanne,\n\nWe have one premium speaking slot left at our AI Productivity Summit in Dubai. Sponsor fee: €15.000 + flight. Reply within 24 hours.",
+    date: `${today}T02:10:00`,
+    read: false,
+    archived: false,
+    starred: false,
+    replied: false,
+    folder: "inbox",
+    to: [USER.name],
+  },
+];
