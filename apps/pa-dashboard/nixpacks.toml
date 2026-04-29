@@ -1,6 +1,5 @@
-providers = ["bun"]
-
 [phases.setup]
+nixPkgs = ["nodejs_20", "bun"]
 aptPkgs = ["curl"]
 
 [phases.install]
@@ -10,4 +9,4 @@ cmds = ["bun install --frozen-lockfile"]
 cmds = ["bun run build"]
 
 [start]
-cmd = "bun run start"
+cmd = "bun run server.ts"
