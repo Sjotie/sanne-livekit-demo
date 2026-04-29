@@ -62,6 +62,14 @@ ROOM_NAME = os.environ.get("DUO_ROOM_NAME", "binnenloop")
 VOICE_OPTIMIST = os.environ.get("DUO_VOICE_OPTIMIST", "Puck")
 VOICE_CRITICUS = os.environ.get("DUO_VOICE_CRITICUS", "Pulcherrima")
 TTS_MODEL = os.environ.get("DUO_TTS_MODEL", "gemini-2.5-flash-preview-tts")
+# Kill-switch endpoint van de bun-server. Als gezet pollt de agent
+# elke ~2s; bij paused=true skip hij turns (geen LLM/TTS-kosten).
+DUO_CONTROL_URL = os.environ.get(
+    "DUO_CONTROL_URL", "http://localhost:1421/duo-control"
+)
+# Hard plafond als nuclear option — voorkom dat de agent eindeloos draait
+# als het control-endpoint onbereikbaar is.
+MAX_TOTAL_TURNS = int(os.environ.get("DUO_MAX_TOTAL_TURNS", "0") or 0)
 TTS_SAMPLE_RATE = 24_000
 TTS_CHANNELS = 1
 TTS_SAMPLES_PER_FRAME = 480  # 20 ms @ 24 kHz
@@ -441,6 +449,18 @@ async def _setup_speaker(
 # ─── Conversation loop ─────────────────────────────────────────────────────
 
 
+def _check_paused() -> bool:
+    """Vraag de bun-server of het gesprek gepauzeerd is. Faalt stil → niet pauzeren."""
+    if not DUO_CONTROL_URL:
+        return False
+    try:
+        with urllib.request.urlopen(DUO_CONTROL_URL, timeout=2) as resp:
+            data = json.loads(resp.read().decode())
+        return bool(data.get("paused"))
+    except Exception:  # noqa: BLE001
+        return False
+
+
 async def _next_topic(bus: ConversationBus, topics: list[dict]) -> dict:
     candidates = [t for t in topics if t.get("title") != bus.topic]
     new_topic = random.choice(candidates) if candidates else topics[0]
@@ -507,11 +527,34 @@ async def _run_loop(
             pcm = None
         return reply_text, pcm
 
+    # Wacht tot de pauze uit staat voordat we de eerste turn voorbereiden.
+    while not stop_event.is_set():
+        if not await asyncio.to_thread(_check_paused):
+            break
+        logger.info("[duo] gepauzeerd — wacht 3s")
+        await asyncio.sleep(3)
+
     # Eerste turn: bereid synchroon voor.
     current = optimist if bus.current_speaker == "optimist" else criticus
     next_text, next_pcm = await _prepare_turn(current)
 
+    total_turns = 0
     while not stop_event.is_set():
+        # Pauze-check vóór elke turn — dit voorkomt API-kosten.
+        while not stop_event.is_set():
+            if not await asyncio.to_thread(_check_paused):
+                break
+            logger.info("[duo] gepauzeerd — geen API-calls, wacht 3s")
+            await asyncio.sleep(3)
+        if stop_event.is_set():
+            break
+
+        # Hard plafond als nuclear option (default uit als 0).
+        if MAX_TOTAL_TURNS and total_turns >= MAX_TOTAL_TURNS:
+            logger.info("[duo] MAX_TOTAL_TURNS bereikt — stop")
+            break
+        total_turns += 1
+
         speaker = optimist if bus.current_speaker == "optimist" else criticus
         other = criticus if speaker is optimist else optimist
 

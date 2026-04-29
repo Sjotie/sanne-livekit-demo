@@ -153,6 +153,57 @@
   }
 }
 
+/* ─── Controls (pauze + persona-switch) rechtsboven ─── */
+.binnenloop-controls {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 4;
+  display: flex;
+  gap: 8px;
+}
+
+.binnenloop-pause,
+.binnenloop-switch {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Avenir LT Std", "Helvetica Neue", system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.binnenloop-pause:hover,
+.binnenloop-switch:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.binnenloop-pause.is-paused {
+  background: rgba(214, 255, 2, 0.18);
+  border-color: rgba(214, 255, 2, 0.4);
+  color: #d6ff02;
+}
+
+.binnenloop-pause.is-paused:hover {
+  background: rgba(214, 255, 2, 0.28);
+}
+
+.binnenloop-pause:focus-visible,
+.binnenloop-switch:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.4);
+  outline-offset: 2px;
+}
+
 /* ─── Unlock-overlay (autoplay-block) ─── */
 .binnenloop-unlock {
   position: absolute;

@@ -107,7 +107,8 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
   const [currentLine, setCurrentLine] = useState<string>("");
   const [transcriptVisible, setTranscriptVisible] = useState(false);
   const [t, setTime] = useState(0);
-  const audioContainerRef = useRef<HTMLDivElement | null>(null);
+  const audioElRef = useRef<HTMLAudioElement | null>(null);
+  const attachedTrackRef = useRef<RemoteAudioTrack | null>(null);
   const roomRef = useRef<Room | null>(null);
   const retryRef = useRef<number | null>(null);
 
@@ -118,7 +119,10 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const [level, setLevel] = useState(0);
+  const [audioActive, setAudioActive] = useState(false);
   const [audioBlocked, setAudioBlocked] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const lastVoiceTsRef = useRef(0);
 
   const ownIdentity = useMemo(() => `agent-${screen}`, [screen]);
 
@@ -143,14 +147,18 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
           sumSq += v * v;
         }
         const rms = Math.sqrt(sumSq / buf.length); // typisch 0..0.3 voor TTS
-        // Perceptuele compressie met sqrt zodat zachte stukjes ook
-        // beweging geven; voorkomt lineaire saturatie.
-        target = Math.min(1, Math.sqrt(rms * 4));
+        target = Math.min(1, rms * 3.5);
       }
-      // Asymmetrische smoothing: snel omhoog, trager omlaag (natural decay).
-      const alpha = target > smooth ? 0.45 : 0.12;
-      smooth = smooth + (target - smooth) * alpha;
+      // Symmetrische exponential smoothing: zacht heen-en-weer, gaat
+      // netjes terug naar 0 als audio stopt.
+      smooth = smooth + (target - smooth) * 0.13;
       setLevel(smooth);
+
+      // Hold-window: zodra audio gehoord, "aan het woord" blijft 1.5s aan
+      // ook bij korte dipjes tussen zinnen — voorkomt false "luistert".
+      if (smooth > 0.05) lastVoiceTsRef.current = now;
+      const active = now - lastVoiceTsRef.current < 1500;
+      setAudioActive((p) => (p === active ? p : active));
 
       raf = requestAnimationFrame(tick);
     };
@@ -179,7 +187,7 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
       const source = ctx.createMediaStreamSource(stream);
       const analyser = ctx.createAnalyser();
       analyser.fftSize = 1024;
-      analyser.smoothingTimeConstant = 0.7;
+      analyser.smoothingTimeConstant = 0.88;
       source.connect(analyser);
       sourceRef.current = source;
       analyserRef.current = analyser;
@@ -204,23 +212,25 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
 
       room.on(RoomEvent.TrackSubscribed, (track, _pub, participant) => {
         if (
-          participant.identity === ownIdentity &&
-          track.kind === Track.Kind.Audio
+          participant.identity !== ownIdentity ||
+          track.kind !== Track.Kind.Audio
         ) {
-          const audio = track as RemoteAudioTrack;
-          const audioEl = audio.attach() as HTMLAudioElement;
-          audioEl.autoplay = true;
-          audioEl.muted = false;
-          audioEl.playsInline = true;
-          audioEl.style.display = "none";
-          (audioContainerRef.current ?? document.body).appendChild(audioEl);
-          // Probeer expliciet te starten — autoplay kan stilletjes geblokt
-          // zijn na een refresh zonder user gesture.
-          audioEl.play().catch((err) => {
-            console.warn("autoplay geblokkeerd, wacht op tap:", err);
-            setAudioBlocked(true);
-          });
+          return;
         }
+        const audio = track as RemoteAudioTrack;
+        // Detach een eventuele eerdere track van ons audio-element en attach
+        // de nieuwe op DEZELFDE <audio> tag — voorkomt dubbele streams onder
+        // React StrictMode (dubbele mount) of bij reconnects.
+        attachedTrackRef.current?.detach();
+        const audioEl = audioElRef.current;
+        if (!audioEl) return;
+        audio.attach(audioEl);
+        attachedTrackRef.current = audio;
+        attachAnalyser(audio);
+        audioEl.play().catch((err) => {
+          console.warn("autoplay geblokkeerd, wacht op tap:", err);
+          setAudioBlocked(true);
+        });
       });
 
       room.on(
@@ -271,6 +281,17 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
     connect();
     return () => {
       if (retryRef.current) window.clearTimeout(retryRef.current);
+      attachedTrackRef.current?.detach();
+      attachedTrackRef.current = null;
+      try {
+        sourceRef.current?.disconnect();
+      } catch {
+        /* ignore */
+      }
+      audioCtxRef.current?.close().catch(() => {});
+      audioCtxRef.current = null;
+      analyserRef.current = null;
+      sourceRef.current = null;
       roomRef.current?.disconnect();
       roomRef.current = null;
     };
@@ -278,24 +299,60 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
 
   // Click/tap-to-unlock voor autoplay (één user gesture is genoeg).
   const handleUnlock = useCallback(() => {
-    const els = audioContainerRef.current?.querySelectorAll("audio");
-    let unlocked = true;
-    els?.forEach((el) => {
-      try {
-        const p = (el as HTMLAudioElement).play();
-        if (p && typeof p.then === "function") {
-          p.catch(() => {
-            unlocked = false;
-          });
-        }
-      } catch {
-        unlocked = false;
-      }
-    });
-    if (unlocked) setAudioBlocked(false);
+    audioCtxRef.current?.resume().catch(() => {});
+    const el = audioElRef.current;
+    if (!el) return;
+    el.play()
+      .then(() => setAudioBlocked(false))
+      .catch(() => {});
   }, []);
 
-  const isSpeaking = level > 0.04;
+  const isSpeaking = audioActive;
+  const otherScreen: Screen = screen === "optimist" ? "criticus" : "optimist";
+  const otherLabel = PALETTE[otherScreen].label;
+
+  const switchPersona = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("screen", otherScreen);
+    window.location.href = url.toString();
+  };
+
+  // Sync paused-state met de bun-server bij mount + bij toggle.
+  useEffect(() => {
+    let active = true;
+    const sync = async () => {
+      try {
+        const r = await fetch("/duo-control");
+        if (!r.ok) return;
+        const data = await r.json();
+        if (active && typeof data.paused === "boolean") {
+          setPaused(data.paused);
+        }
+      } catch {
+        /* ignore */
+      }
+    };
+    sync();
+    const interval = window.setInterval(sync, 5000);
+    return () => {
+      active = false;
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  const togglePause = async () => {
+    const next = !paused;
+    setPaused(next);
+    try {
+      await fetch("/duo-control", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paused: next }),
+      });
+    } catch {
+      /* ignore — sync zal volgende keer wel kloppen */
+    }
+  };
 
   return (
     <div
@@ -329,6 +386,25 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
         {status === "waiting" && "wacht op verbinding"}
       </div>
 
+      <div className="binnenloop-controls">
+        <button
+          type="button"
+          className={`binnenloop-pause ${paused ? "is-paused" : ""}`}
+          onClick={togglePause}
+          title={paused ? "Hervat het gesprek" : "Pauzeer (geen API-kosten)"}
+        >
+          {paused ? "▶ start" : "■ stop"}
+        </button>
+        <button
+          type="button"
+          className="binnenloop-switch"
+          onClick={switchPersona}
+          title={`Wissel naar ${otherLabel}`}
+        >
+          ↻ {otherLabel}
+        </button>
+      </div>
+
       {audioBlocked && (
         <button
           type="button"
@@ -339,7 +415,12 @@ export default function BinnenloopScreen({ screen }: { screen: Screen }) {
         </button>
       )}
 
-      <div ref={audioContainerRef} hidden />
+      <audio
+        ref={audioElRef}
+        autoPlay
+        playsInline
+        style={{ display: "none" }}
+      />
     </div>
   );
 }

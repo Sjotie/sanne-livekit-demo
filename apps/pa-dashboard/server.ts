@@ -104,6 +104,23 @@ Bun.serve({
       return new Response("ok", { headers: CORS_HEADERS });
     }
 
+    if (url.pathname === "/duo-control") {
+      // In-memory pause-flag voor de duo-agent (cost-control kill-switch).
+      // GET → state. POST {paused: bool} → set.
+      // Reset op server-restart (default = running).
+      const headers = { "Content-Type": "application/json", ...CORS_HEADERS };
+      if (req.method === "POST") {
+        try {
+          const body = await req.json();
+          if (typeof body?.paused === "boolean") {
+            (globalThis as any).__duoPaused = body.paused;
+          }
+        } catch {}
+      }
+      const paused = !!(globalThis as any).__duoPaused;
+      return new Response(JSON.stringify({ paused }), { headers });
+    }
+
     if (url.pathname === "/duo-token") {
       // Token voor het Binnenloop-scherm: subscribe-only, geen agent dispatch.
       const params = new URL(req.url).searchParams;
